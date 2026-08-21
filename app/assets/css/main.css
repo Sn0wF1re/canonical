@@ -1,1 +1,51 @@
 @import "tailwindcss";
+@import "@nuxt/ui";
+
+@theme {
+  /* Brand Accent — Single Source of Truth (#98FF98) */
+  --color-brand-50: #EDFEEE;
+  --color-brand-100: #D4FBD4;
+  --color-brand-200: #A8F7A8;
+  --color-brand-300: #6FEF6F;
+  --color-brand-400: #3DE83D;
+  --color-brand-500: #98FF98;
+  --color-brand-600: #1ED11E;
+  --color-brand-700: #17A317;
+  --color-brand-800: #0F750F;
+  --color-brand-900: #084808;
+  --color-brand-950: #042A04;
+
+  /* Neutral Dark Palette */
+  --color-dark-primary: #101512;
+  --color-dark-elevated: #171D19;
+  --color-dark-muted: #242B27;
+
+  /* Neutral Light Palette */
+  --color-light-bg: #F7F8F5;
+  --color-light-muted: #F1F3EF;
+  --color-surface: #FFFFFF;
+
+  /* Text / Foreground Colors */
+  --color-text-primary: #151A17;
+  --color-text-muted: #5D655F;
+
+  /* UI Elements */
+  --color-border-main: #DCE1DC;
+
+  /* Typography */
+  --font-display: 'Exo 2', system-ui, sans-serif;
+  --font-sans: 'Inter', system-ui, sans-serif;
+}
+
+:root {
+  --color-background: var(--color-light-bg);
+  --color-foreground: var(--color-text-primary);
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
