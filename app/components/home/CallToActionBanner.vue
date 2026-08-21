@@ -1,0 +1,27 @@
+<script setup lang="ts">
+import { siteContent } from '~/content/site'
+</script>
+
+<template>
+  <section class="bg-dark-primary py-16 sm:py-24">
+    <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 text-center">
+      <h2 class="font-display text-3xl sm:text-4xl font-bold text-white mb-4">
+        Ready to Get Started?
+      </h2>
+      <p class="text-white/60 max-w-2xl mx-auto mb-10">
+        Whether you need a property valuation or management services, our team is ready to assist. Reach out today for a consultation.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <UButton to="/services/valuation" color="primary" size="lg" trailing-icon="i-lucide-arrow-right">
+          Request Valuation
+        </UButton>
+        <UButton :href="`https://wa.me/${siteContent.company.whatsapp.replace(/[^0-9]/g, '')}`" target="_blank" color="neutral" variant="outline" size="lg" icon="i-lucide-message-circle" class="border-white/20 text-white hover:bg-white/10">
+          WhatsApp Us
+        </UButton>
+        <UButton to="/contact" color="neutral" variant="outline" size="lg" class="border-white/20 text-white hover:bg-white/10">
+          Contact Page
+        </UButton>
+      </div>
+    </div>
+  </section>
+</template>

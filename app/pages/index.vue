@@ -8,6 +8,13 @@ useHead({
 
 <template>
   <div>
-    <!-- Homepage sections will be composed here -->
+    <HomeHeroSection />
+    <HomeQuickIntakeWidget />
+    <HomeRegulatoryCredentials />
+    <HomeTrustMetricsStrip />
+    <HomeValuationAuthorityBlock />
+    <HomeLandlordAcquisitionBlock />
+    <HomeSampleReportPreview />
+    <HomeCallToActionBanner />
   </div>
 </template>
