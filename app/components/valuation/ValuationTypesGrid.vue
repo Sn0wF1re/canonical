@@ -1,0 +1,34 @@
+<script setup lang="ts">
+const types = [
+  { icon: 'i-lucide-building', title: 'Commercial', description: 'Offices, retail spaces, shopping centres, and mixed-use developments' },
+  { icon: 'i-lucide-home', title: 'Residential', description: 'Apartments, houses, townhouses, and residential estates' },
+  { icon: 'i-lucide-warehouse', title: 'Industrial', description: 'Warehouses, factories, godowns, and light industrial facilities' },
+  { icon: 'i-lucide-trees', title: 'Agricultural', description: 'Farmland, ranches, plantations, and agricultural properties' },
+  { icon: 'i-lucide-cog', title: 'Plant & Machinery', description: 'Industrial equipment, plant installations, and specialized machinery' }
+]
+</script>
+
+<template>
+  <section class="bg-light-bg py-16 sm:py-24">
+    <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12">
+      <div class="text-center mb-12">
+        <h2 class="font-display text-3xl sm:text-4xl font-bold text-text-primary mb-3">Valuation Categories</h2>
+        <p class="text-text-muted max-w-2xl mx-auto">Comprehensive property valuation across all asset classes in Kenya</p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div
+          v-for="type in types"
+          :key="type.title"
+          class="bg-white p-6 rounded-xl border border-border-main hover:shadow-lg hover:border-brand-500/30 transition-all"
+        >
+          <div class="w-12 h-12 rounded-lg bg-brand-50 flex items-center justify-center mb-4">
+            <UIcon :name="type.icon" class="w-6 h-6 text-brand-600" />
+          </div>
+          <h3 class="font-display font-bold text-text-primary mb-2">{{ type.title }}</h3>
+          <p class="text-sm text-text-muted leading-relaxed">{{ type.description }}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</template>
