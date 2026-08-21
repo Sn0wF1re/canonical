@@ -15,10 +15,10 @@ import { siteContent } from '~/content/site'
         <UButton to="/services/valuation" color="primary" size="lg" trailing-icon="i-lucide-arrow-right">
           Request Valuation
         </UButton>
-        <UButton :href="`https://wa.me/${siteContent.company.whatsapp.replace(/[^0-9]/g, '')}`" target="_blank" color="neutral" variant="outline" size="lg" icon="i-lucide-message-circle" class="border-white/20 text-white hover:bg-white/10">
+        <UButton :href="`https://wa.me/${siteContent.company.whatsapp.replace(/[^0-9]/g, '')}`" target="_blank" color="neutral" variant="outline" size="lg" icon="i-lucide-message-circle" :ui="{ label: 'text-white', base: 'border-white/20 hover:bg-white/10' }">
           WhatsApp Us
         </UButton>
-        <UButton to="/contact" color="neutral" variant="outline" size="lg" class="border-white/20 text-white hover:bg-white/10">
+        <UButton to="/contact" color="neutral" variant="outline" size="lg" :ui="{ label: 'text-white', base: 'border-white/20 hover:bg-white/10' }">
           Contact Page
         </UButton>
       </div>
