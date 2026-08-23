@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-
 const isMobileMenuOpen = ref(false)
 
 const navLinks = [
@@ -12,10 +10,12 @@ const navLinks = [
 </script>
 
 <template>
-  <header class="fixed top-0 left-0 right-0 z-50 bg-dark-primary/90 backdrop-blur-md border-b border-dark-muted">
+  <header
+    class="fixed top-0 left-0 right-0 z-50 bg-dark-primary/80 backdrop-blur-xl border-b border-white/5"
+  >
     <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 h-20 flex items-center justify-between">
       <NuxtLink to="/" class="flex items-center gap-3">
-        <img src="/canonical_logo.png" alt="Canonical Realty" class="h-10 w-auto" />
+        <NuxtImg src="/canonical_logo.webp" alt="Canonical Realty" class="h-10 w-auto" />
       </NuxtLink>
 
       <nav class="hidden md:flex items-center gap-8">
@@ -23,7 +23,7 @@ const navLinks = [
           v-for="link in navLinks"
           :key="link.path"
           :to="link.path"
-          class="text-sm font-medium text-white/80 hover:text-brand-500 transition-colors font-sans"
+          class="text-sm font-medium text-white/80 hover:text-brand-500 transition-colors font-display"
           active-class="text-brand-500"
         >
           {{ link.name }}
@@ -46,7 +46,10 @@ const navLinks = [
       </button>
     </div>
 
-    <div v-if="isMobileMenuOpen" class="md:hidden bg-dark-primary border-b border-dark-muted px-5 py-6 space-y-4">
+    <div
+      v-if="isMobileMenuOpen"
+      class="md:hidden bg-dark-primary/95 backdrop-blur-xl px-5 py-6 space-y-4 border-b border-white/5"
+    >
       <NuxtLink
         v-for="link in navLinks"
         :key="link.path"
@@ -56,7 +59,7 @@ const navLinks = [
       >
         {{ link.name }}
       </NuxtLink>
-      <div class="pt-4 border-t border-dark-muted">
+      <div class="pt-4 border-t border-white/10">
         <UButton
           to="/services/valuation"
           color="primary"
