@@ -27,6 +27,7 @@ const useCases = [
   <section class="bg-surface py-16 sm:py-24">
     <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12">
       <div class="max-w-2xl mb-12">
+        <p class="text-xs font-semibold uppercase tracking-widest text-text-muted mb-3">Institutional Applications</p>
         <h2 class="font-display text-3xl sm:text-4xl font-bold text-text-primary mb-4">Use Cases</h2>
         <p class="text-text-muted">Our valuations serve a wide range of institutional and private purposes</p>
       </div>

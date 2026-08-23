@@ -8,9 +8,11 @@ const deliverables = [
 </script>
 
 <template>
-  <section class="bg-light-muted py-16 sm:py-24">
-    <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12">
+  <section class="bg-light-muted py-16 sm:py-24 relative overflow-hidden">
+    <div class="absolute inset-0 pattern-dots pointer-events-none" />
+      <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 relative z-10">
       <div class="max-w-2xl mb-12">
+        <p class="text-xs font-semibold uppercase tracking-widest text-text-muted mb-3">Deliverables</p>
         <h2 class="font-display text-3xl sm:text-4xl font-bold text-text-primary mb-4">Report Transparency</h2>
         <p class="text-text-muted">Every deliverable is structured, audit-ready, and institutionally accepted</p>
       </div>
