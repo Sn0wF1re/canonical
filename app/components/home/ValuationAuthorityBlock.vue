@@ -19,10 +19,11 @@ const features = [
 </script>
 
 <template>
-  <section class="bg-light-bg py-16 sm:py-24">
-    <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12">
+  <section class="bg-light-bg py-16 sm:py-24 relative overflow-hidden">
+    <div class="absolute inset-0 pattern-diagonals pointer-events-none" />
+      <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 relative z-10">
       <div class="max-w-2xl mb-12">
-        <p class="text-brand-600 font-display font-semibold text-sm uppercase tracking-widest mb-3">Valuation</p>
+        <p class="text-xs font-semibold uppercase tracking-widest text-text-muted mb-3">Scope of Practice</p>
         <h2 class="font-display text-3xl sm:text-4xl font-bold text-text-primary mb-4">
           Reports That Drive Decisions
         </h2>

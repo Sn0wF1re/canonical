@@ -21,8 +21,9 @@ const metrics = [
 </script>
 
 <template>
-  <section class="bg-dark-elevated py-16 sm:py-20">
-    <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12">
+  <section class="bg-dark-elevated py-16 sm:py-20 relative overflow-hidden">
+    <div class="absolute inset-0 pattern-grid pointer-events-none" />
+      <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 relative z-10">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         <div
           v-for="metric in metrics"

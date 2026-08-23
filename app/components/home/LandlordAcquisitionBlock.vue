@@ -19,11 +19,12 @@ const benefits = [
 </script>
 
 <template>
-  <section class="bg-dark-primary py-16 sm:py-24">
-    <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12">
+  <section class="bg-dark-primary py-16 sm:py-24 relative overflow-hidden">
+    <div class="absolute inset-0 pattern-dots pointer-events-none" />
+      <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 relative z-10">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
         <div>
-          <p class="text-brand-500 font-display font-semibold text-sm uppercase tracking-widest mb-3">Property Management</p>
+          <p class="text-xs font-semibold uppercase tracking-widest text-white/40 mb-3">Asset Protection System</p>
           <h2 class="font-display text-3xl sm:text-4xl font-bold text-white mb-6">
             Tech-Enabled Management. Yield-Focused Results.
           </h2>

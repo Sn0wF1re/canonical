@@ -3,8 +3,9 @@ import { siteContent } from '~/content/site'
 </script>
 
 <template>
-  <section class="bg-dark-primary py-16 sm:py-24">
-    <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 text-center">
+  <section class="bg-dark-primary py-16 sm:py-24 relative overflow-hidden">
+    <div class="absolute inset-0 pattern-grid pointer-events-none" />
+      <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 text-center relative z-10">
       <h2 class="font-display text-3xl sm:text-4xl font-bold text-white mb-4">
         Ready to Get Started?
       </h2>
