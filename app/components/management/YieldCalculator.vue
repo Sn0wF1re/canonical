@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 
+const { elementRef: headingRef, isRevealed } = useReveal()
+
 const monthlyRentPerUnit = ref(50000)
 const totalUnits = ref(10)
 const managementFeeRate = 0.07
@@ -15,9 +17,21 @@ const formatKES = (val: number) => {
 </script>
 
 <template>
-  <section class="bg-dark-primary py-16 sm:py-24">
+  <section class="bg-dark-primary py-16 sm:py-24 relative overflow-hidden">
+    <!-- Floating Shapes -->
+    <div class="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+      <div
+        class="absolute top-[15%] left-[8%] w-40 h-40 rounded-full opacity-[0.06] hero-shape-pulse"
+        style="background: radial-gradient(circle, rgba(152,255,152,0.2), transparent 70%); filter: blur(50px); animation-duration: 10s;"
+      />
+      <div
+        class="absolute top-[55%] right-[10%] w-24 h-24 opacity-[0.05] hero-shape-float"
+        style="clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%); background: linear-gradient(135deg, #98FF98, #1ED11E); animation-duration: 22s; animation-delay: -3s;"
+      />
+      <div class="absolute top-[40%] right-[30%] w-[3px] h-[3px] rounded-full bg-brand-500/15 hero-shape-float" style="animation-duration: 18s;" />
+    </div>
     <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12">
-      <div class="text-center mb-12">
+      <div ref="headingRef" class="text-center mb-12 hero-text-reveal" :class="isRevealed ? 'hero-text-visible' : ''">
         <h2 class="font-display text-3xl sm:text-4xl font-bold text-white mb-3">Estimate Your Portfolio</h2>
         <p class="text-white/60">Interactive calculator for operational estimations. Official quotations require property audit.</p>
       </div>

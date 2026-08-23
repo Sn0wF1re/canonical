@@ -1,4 +1,6 @@
 <script setup lang="ts">
+const { elementRef: headingRef, isRevealed } = useReveal()
+
 const steps = [
   { number: '01', title: 'Property Assessment', description: 'Site visit, condition audit, and market rental analysis.' },
   { number: '02', title: 'Agreement', description: 'Management terms, fee structure, and scope of services defined.' },
@@ -8,9 +10,11 @@ const steps = [
 </script>
 
 <template>
-  <section class="bg-light-bg py-16 sm:py-24">
-    <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12">
-      <div class="text-center mb-12">
+  <section class="bg-light-bg py-16 sm:py-24 relative overflow-hidden">
+    <div class="absolute inset-0 pattern-diagonals pointer-events-none" />
+      <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 relative z-10">
+      <div ref="headingRef" class="text-center mb-12 hero-text-reveal" :class="isRevealed ? 'hero-text-visible' : ''">
+        <p class="text-xs font-semibold uppercase tracking-widest text-text-muted mb-3">Onboarding</p>
         <h2 class="font-display text-3xl sm:text-4xl font-bold text-text-primary mb-3">Onboarding Process</h2>
         <p class="text-text-muted">From assessment to active management in four clear steps</p>
       </div>

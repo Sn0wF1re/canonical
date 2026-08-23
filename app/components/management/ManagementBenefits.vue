@@ -1,4 +1,6 @@
 <script setup lang="ts">
+const { elementRef: headingRef, isRevealed } = useReveal()
+
 const benefits = [
   { icon: 'i-lucide-trending-up', title: 'Maximized Returns', description: 'Market-aligned rental pricing backed by valuation expertise to ensure optimal yield.' },
   { icon: 'i-lucide-eye', title: 'Full Transparency', description: 'Digital ledger access, real-time tenant communications, and monthly financial statements.' },
@@ -10,9 +12,11 @@ const benefits = [
 </script>
 
 <template>
-  <section class="bg-surface py-16 sm:py-24">
-    <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12">
-      <div class="text-center mb-12">
+  <section class="bg-surface py-16 sm:py-24 relative overflow-hidden">
+    <div class="absolute inset-0 pattern-dots pointer-events-none" />
+      <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 relative z-10">
+      <div ref="headingRef" class="text-center mb-12 hero-text-reveal" :class="isRevealed ? 'hero-text-visible' : ''">
+        <p class="text-xs font-semibold uppercase tracking-widest text-text-muted mb-3">Why Canonical</p>
         <h2 class="font-display text-3xl sm:text-4xl font-bold text-text-primary mb-3">Why Choose Us</h2>
         <p class="text-text-muted max-w-2xl mx-auto">A comprehensive management approach designed to protect and grow your investment</p>
       </div>
