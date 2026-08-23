@@ -32,9 +32,9 @@ export const siteContent: SiteContent = {
     tagline: 'Your Trusted Valuation, Property Management and Estate Agents',
     vrbRegistration: '[Content Placeholder: VRB Firm License No.]',
     iskMembership: '[Content Placeholder: ISK Corporate Membership No.]',
-    address: '[Content Placeholder: Physical Office Address, Nairobi, Kenya]',
-    phone: '+254 [Content Placeholder: Phone Number]',
-    whatsapp: '+254 [Content Placeholder: WhatsApp Number]',
+    address: 'Agip House, 6th Floor, Flat 6, Office 4, Nairobi, Kenya',
+    phone: '+254 712 244 494',
+    whatsapp: '+254 712 244 494',
     email: 'info@canonicalrealty.com',
     hours: 'Mon – Fri: 8:00 AM – 5:00 PM EAT'
   },
