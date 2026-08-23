@@ -8,11 +8,11 @@ useHead({
 
 <template>
   <div>
-    <AboutAboutHero />
+    <AboutHero />
     <AboutAccreditations />
     <AboutTeamGrid />
     <AboutCoreValues />
     <AboutLocationBlock />
-    <AboutAboutCTA />
+    <AboutCTA />
   </div>
 </template>

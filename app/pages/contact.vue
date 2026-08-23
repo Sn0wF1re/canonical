@@ -8,9 +8,9 @@ useHead({
 
 <template>
   <div>
-    <ContactContactHero />
-    <ContactContactForm />
-    <ContactContactDetailsGrid />
+    <ContactHero />
+    <ContactForm />
+    <ContactDetailsGrid />
     <ContactMapSection />
     <ContactSlaBanner />
   </div>

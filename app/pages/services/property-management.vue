@@ -8,12 +8,12 @@ useHead({
 
 <template>
   <div>
-    <ManagementManagementHero />
-    <ManagementManagementBenefits />
+    <ManagementHero />
+    <ManagementBenefits />
     <ManagementYieldCalculator />
-    <ManagementManagementTransparency />
+    <ManagementTransparency />
     <ManagementOnboardingTimeline />
     <ManagementLandlordIntakeForm />
-    <ManagementManagementFAQ />
+    <ManagementFAQ />
   </div>
 </template>

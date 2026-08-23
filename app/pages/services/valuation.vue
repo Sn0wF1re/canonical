@@ -8,13 +8,13 @@ useHead({
 
 <template>
   <div>
-    <ValuationValuationHero />
+    <ValuationHero />
     <ValuationComplianceBar />
-    <ValuationValuationTypesGrid />
+    <ValuationTypesGrid />
     <ValuationUseCasesAccordion />
     <ValuationProcessTimeline />
     <ValuationReportTransparencyBlock />
-    <ValuationValuationRequestForm />
-    <ValuationValuationFAQ />
+    <ValuationRequestForm />
+    <ValuationFAQ />
   </div>
 </template>
