@@ -38,7 +38,7 @@ import { siteContent } from '~/content/site'
 
         <div class="rounded-xl overflow-hidden border border-border-main h-80 bg-dark-muted flex items-center justify-center">
           <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15955.267148664688!2d36.8065!3d-1.2864!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f17322dc4de2d%3A0xb13e3e3b5b5b5b5b!2sNairobi%2C%20Kenya!5e0!3m2!1sen!2s!4v1"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.805768201523!2d36.82082357408073!3d-1.2908594356292604!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f10d8c8c4ff0d%3A0x8674b6e558d52d8!2sAGIP%20house%2C%20Nairobi!5e0!3m2!1sen!2ske!4v1787475050374!5m2!1sen!2ske"
             width="100%"
             height="100%"
             style="border:0;"
