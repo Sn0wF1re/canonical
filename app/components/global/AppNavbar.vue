@@ -4,6 +4,7 @@ const isMobileMenuOpen = ref(false)
 const navLinks = [
   { name: 'Valuation', path: '/services/valuation' },
   { name: 'Property Management', path: '/services/property-management' },
+  { name: 'Estate Agency', path: '/services/estate-agency' },
   { name: 'About', path: '/about' },
   { name: 'Contact', path: '/contact' }
 ]
@@ -18,7 +19,7 @@ const navLinks = [
         <NuxtImg src="/canonical_logo.webp" alt="Canonical Realty" class="h-10 w-auto" />
       </NuxtLink>
 
-      <nav class="hidden md:flex items-center gap-8">
+      <nav class="hidden lg:flex items-center gap-8">
         <NuxtLink
           v-for="link in navLinks"
           :key="link.path"
@@ -30,7 +31,7 @@ const navLinks = [
         </NuxtLink>
       </nav>
 
-      <div class="hidden md:flex items-center">
+      <div class="hidden lg:flex items-center">
         <UButton to="/services/valuation" color="primary" size="sm" trailing-icon="i-lucide-arrow-right">
           Request Valuation
         </UButton>
@@ -38,7 +39,7 @@ const navLinks = [
 
       <button
         @click="isMobileMenuOpen = !isMobileMenuOpen"
-        class="md:hidden text-white p-2"
+        class="lg:hidden text-white p-2"
         aria-label="Toggle Navigation Menu"
       >
         <UIcon v-if="!isMobileMenuOpen" name="i-lucide-menu" class="w-6 h-6" />
@@ -48,7 +49,7 @@ const navLinks = [
 
     <div
       v-if="isMobileMenuOpen"
-      class="md:hidden bg-dark-primary/95 backdrop-blur-xl px-5 py-6 space-y-4 border-b border-white/5"
+      class="lg:hidden bg-dark-primary/95 backdrop-blur-xl px-5 py-6 space-y-4 border-b border-white/5"
     >
       <NuxtLink
         v-for="link in navLinks"

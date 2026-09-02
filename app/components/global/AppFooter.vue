@@ -27,6 +27,11 @@ import { siteContent } from '~/content/site'
               </NuxtLink>
             </li>
             <li>
+              <NuxtLink to="/services/estate-agency" class="text-sm text-white/60 hover:text-brand-500 transition-colors">
+                Estate Agency
+              </NuxtLink>
+            </li>
+            <li>
               <NuxtLink to="/about" class="text-sm text-white/60 hover:text-brand-500 transition-colors">
                 About Us
               </NuxtLink>
@@ -67,7 +72,7 @@ import { siteContent } from '~/content/site'
           &copy; {{ new Date().getFullYear() }} {{ siteContent.company.name }}. All rights reserved.
         </p>
         <p class="text-xs text-white/40">
-          VRB: {{ siteContent.company.vrbRegistration }} | ISK: {{ siteContent.company.iskMembership }}
+          VRB: {{ siteContent.company.vrbRegistration }} | ISK: {{ siteContent.company.iskMembership }} | EARB: {{ siteContent.company.earbRegistration }}
         </p>
       </div>
     </div>
