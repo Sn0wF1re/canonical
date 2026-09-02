@@ -16,7 +16,7 @@ const navLinks = [
   >
     <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 h-20 flex items-center justify-between">
       <NuxtLink to="/" class="flex items-center gap-3">
-        <NuxtImg src="/canonical_logo.webp" alt="Canonical Realty" class="h-10 w-auto" />
+        <img src="/canonical_logo.webp" alt="Canonical Realty" class="h-10 w-auto" />
       </NuxtLink>
 
       <nav class="hidden lg:flex items-center gap-8">

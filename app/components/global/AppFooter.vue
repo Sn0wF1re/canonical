@@ -8,7 +8,7 @@ import { siteContent } from '~/content/site'
       <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
         <div>
           <div class="flex items-center gap-3 mb-4">
-            <NuxtImg src="/canonical_logo.webp" alt="Canonical Realty" class="h-8 w-auto" />
+            <img src="/canonical_logo.webp" alt="Canonical Realty" class="h-8 w-auto" />
           </div>
           <p class="text-sm text-white/60 leading-relaxed">{{ siteContent.company.tagline }}</p>
         </div>
