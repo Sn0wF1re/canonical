@@ -11,7 +11,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <section class="relative min-h-screen overflow-hidden bg-dark-primary">
+  <section class="relative min-h-svh overflow-hidden bg-dark-primary">
     <!-- Video Background -->
     <video
       autoplay
@@ -85,7 +85,7 @@ onMounted(() => {
     </div>
 
     <!-- Hero Content -->
-    <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 min-h-screen flex items-end pb-24 sm:pb-32 lg:pb-40">
+    <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 min-h-svh flex items-end pt-24 sm:pt-28 pb-24 sm:pb-32 lg:pb-40">
       <div class="max-w-3xl">
         <!-- Badge -->
         <p
