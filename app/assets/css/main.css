@@ -53,6 +53,11 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Keep anchor targets clear of the fixed navbar (80px + breathing room) */
+section[id] {
+  scroll-margin-top: 6rem;
+}
+
 /* ========================================
    Hero Text Reveal Animation
    ======================================== */
