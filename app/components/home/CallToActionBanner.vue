@@ -12,14 +12,14 @@ import { siteContent } from '~/content/site'
       <p class="text-white/60 max-w-2xl mx-auto mb-10">
         Whether you need a property valuation or management services, our team is ready to assist. Reach out today for a consultation.
       </p>
-      <div class="flex flex-col sm:flex-row gap-4 justify-center">
-        <UButton to="/services/valuation" color="primary" size="lg" trailing-icon="i-lucide-arrow-right">
+      <div class="flex flex-col sm:grid sm:grid-cols-3 gap-4 sm:max-w-2xl mx-auto">
+        <UButton to="/services/valuation" color="primary" size="lg" trailing-icon="i-lucide-arrow-right" class="justify-center">
           Request Valuation
         </UButton>
-        <UButton :href="`https://wa.me/${siteContent.company.whatsapp.replace(/[^0-9]/g, '')}`" target="_blank" color="neutral" variant="outline" size="lg" icon="i-lucide-message-circle" :ui="{ label: 'text-white', base: 'border-white/20 hover:bg-white/10' }">
+        <UButton :href="`https://wa.me/${siteContent.company.whatsapp.replace(/[^0-9]/g, '')}`" target="_blank" color="neutral" variant="outline" size="lg" icon="i-lucide-message-circle" class="justify-center" :ui="{ label: 'text-white', base: 'border-white/20 hover:bg-white/10' }">
           WhatsApp Us
         </UButton>
-        <UButton to="/contact" color="neutral" variant="outline" size="lg" :ui="{ label: 'text-white', base: 'border-white/20 hover:bg-white/10' }">
+        <UButton to="/contact" color="neutral" variant="outline" size="lg" class="justify-center" :ui="{ label: 'text-white', base: 'border-white/20 hover:bg-white/10' }">
           Contact Page
         </UButton>
       </div>

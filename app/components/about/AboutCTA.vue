@@ -10,11 +10,11 @@
       <p class="text-white/60 max-w-xl mx-auto mb-8">
         Whether you need valuation, management, or advisory services — our team is ready to assist.
       </p>
-      <div class="flex flex-col sm:flex-row gap-4 justify-center">
-        <UButton to="/contact" color="primary" size="lg" trailing-icon="i-lucide-arrow-right">
+      <div class="flex flex-col sm:grid sm:grid-cols-2 gap-4 sm:max-w-lg mx-auto">
+        <UButton to="/contact" color="primary" size="lg" trailing-icon="i-lucide-arrow-right" class="justify-center">
           Contact Us
         </UButton>
-        <UButton to="/services/valuation" color="neutral" variant="outline" size="lg" :ui="{ label: 'text-white', base: 'border-white/20 hover:bg-white/10' }">
+        <UButton to="/services/valuation" color="neutral" variant="outline" size="lg" class="justify-center" :ui="{ label: 'text-white', base: 'border-white/20 hover:bg-white/10' }">
           Request Valuation
         </UButton>
       </div>
