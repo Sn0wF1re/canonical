@@ -123,7 +123,7 @@ onMounted(() => {
           <UButton to="/services/valuation" color="primary" size="lg" trailing-icon="i-lucide-arrow-right" class="justify-center">
             Request Valuation
           </UButton>
-          <UButton to="/services/property-management" color="neutral" variant="outline" size="lg" class="justify-center" :ui="{ label: 'text-white', base: 'border-white/20 hover:bg-white/10' }">
+          <UButton to="/services/property-management" color="neutral" variant="outline" size="lg" class="justify-center">
             Property Management
           </UButton>
         </div>

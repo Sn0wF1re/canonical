@@ -14,7 +14,7 @@
         <UButton to="/contact" color="primary" size="lg" trailing-icon="i-lucide-arrow-right" class="justify-center">
           Contact Us
         </UButton>
-        <UButton to="/services/valuation" color="neutral" variant="outline" size="lg" class="justify-center" :ui="{ label: 'text-white', base: 'border-white/20 hover:bg-white/10' }">
+        <UButton to="/services/valuation" color="neutral" variant="outline" size="lg" class="justify-center">
           Request Valuation
         </UButton>
       </div>
