@@ -40,6 +40,9 @@
 :root {
   --color-background: var(--color-light-bg);
   --color-foreground: var(--color-text-primary);
+  /* Brand mint (#98FF98) is a light color — text placed on it must be dark.
+     Overrides Nuxt UI's white `text-inverted` used by solid buttons. */
+  --ui-text-inverted: var(--color-dark-primary);
 }
 
 body {
