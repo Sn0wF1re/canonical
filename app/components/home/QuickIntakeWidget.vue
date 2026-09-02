@@ -1,23 +1,33 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-const selectedService = ref<'valuation' | 'management'>('valuation')
+type ServiceMode = 'valuation' | 'management' | 'agency'
 
-const valuationFields = [
-  { name: 'fullName', label: 'Full Name', placeholder: 'John Kamau' },
-  { name: 'email', label: 'Email Address', placeholder: 'john@example.com' },
-  { name: 'phone', label: 'Phone Number', placeholder: '+254 7XX XXX XXX' },
-  { name: 'propertyType', label: 'Property Type', placeholder: 'e.g. Commercial, Residential, Industrial' },
-  { name: 'location', label: 'Property Location', placeholder: 'e.g. Westlands, Nairobi' }
-]
+const selectedService = ref<ServiceMode>('valuation')
 
-const managementFields = [
-  { name: 'fullName', label: 'Full Name', placeholder: 'Jane Wanjiku' },
-  { name: 'email', label: 'Email Address', placeholder: 'jane@example.com' },
-  { name: 'phone', label: 'Phone Number', placeholder: '+254 7XX XXX XXX' },
-  { name: 'units', label: 'Number of Units', placeholder: 'e.g. 5 residential units' },
-  { name: 'currentOccupancy', label: 'Current Occupancy Rate', placeholder: 'e.g. 80%' }
-]
+const fieldsByService: Record<ServiceMode, Array<{ name: string; label: string; placeholder: string }>> = {
+  valuation: [
+    { name: 'fullName', label: 'Full Name', placeholder: 'John Kamau' },
+    { name: 'email', label: 'Email Address', placeholder: 'john@example.com' },
+    { name: 'phone', label: 'Phone Number', placeholder: '+254 7XX XXX XXX' },
+    { name: 'propertyType', label: 'Property Type', placeholder: 'e.g. Commercial, Residential, Industrial' },
+    { name: 'location', label: 'Property Location', placeholder: 'e.g. Westlands, Nairobi' }
+  ],
+  management: [
+    { name: 'fullName', label: 'Full Name', placeholder: 'Jane Wanjiku' },
+    { name: 'email', label: 'Email Address', placeholder: 'jane@example.com' },
+    { name: 'phone', label: 'Phone Number', placeholder: '+254 7XX XXX XXX' },
+    { name: 'units', label: 'Number of Units', placeholder: 'e.g. 5 residential units' },
+    { name: 'currentOccupancy', label: 'Current Occupancy Rate', placeholder: 'e.g. 80%' }
+  ],
+  agency: [
+    { name: 'fullName', label: 'Full Name', placeholder: 'Brian Otieno' },
+    { name: 'email', label: 'Email Address', placeholder: 'brian@example.com' },
+    { name: 'phone', label: 'Phone Number', placeholder: '+254 7XX XXX XXX' },
+    { name: 'interest', label: 'I Want To', placeholder: 'e.g. Buy, Sell, or Rent' },
+    { name: 'location', label: 'Preferred Location', placeholder: 'e.g. Karen, Nairobi' }
+  ]
+}
 </script>
 
 <template>
@@ -30,7 +40,7 @@ const managementFields = [
       </div>
 
       <div class="bg-white border border-border-main rounded-xl p-6 sm:p-8 shadow-sm">
-        <div class="flex gap-2 mb-8 p-1 bg-light-muted rounded-lg">
+        <div class="flex flex-col sm:flex-row gap-2 mb-8 p-1 bg-light-muted rounded-lg">
           <button
             @click="selectedService = 'valuation'"
             class="flex-1 py-2.5 px-4 rounded-md text-sm font-semibold transition-all"
@@ -45,10 +55,17 @@ const managementFields = [
           >
             Property Management
           </button>
+          <button
+            @click="selectedService = 'agency'"
+            class="flex-1 py-2.5 px-4 rounded-md text-sm font-semibold transition-all"
+            :class="selectedService === 'agency' ? 'bg-brand-500 text-dark-primary' : 'text-text-muted hover:text-text-primary'"
+          >
+            Buy / Sell / Rent
+          </button>
         </div>
 
         <form class="space-y-5">
-          <div v-for="field in (selectedService === 'valuation' ? valuationFields : managementFields)" :key="field.name">
+          <div v-for="field in fieldsByService[selectedService]" :key="field.name">
             <label :for="field.name" class="block text-xs font-semibold uppercase tracking-wider text-text-muted mb-2">
               {{ field.label }}
             </label>
