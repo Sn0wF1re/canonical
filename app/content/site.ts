@@ -34,7 +34,7 @@ export interface SiteContent {
   team: Array<{
     name: string;
     title: string;
-    vrbNumber: string;
+    iskNumber: string;
     bio: string;
   }>;
 }
@@ -43,9 +43,9 @@ export const siteContent: SiteContent = {
   company: {
     name: 'Canonical Realty',
     tagline: 'Your Trusted Valuation, Property Management and Estate Agents',
-    vrbRegistration: '[Content Placeholder: VRB Firm License No.]',
-    iskMembership: '[Content Placeholder: ISK Corporate Membership No.]',
-    earbRegistration: '[Content Placeholder: EARB Firm License No.]',
+    vrbRegistration: 'Compliant',
+    iskMembership: 'Compliant',
+    earbRegistration: 'Compliant',
     address: 'Agip House, 6th Floor, Flat 6, Office 4, Nairobi, Kenya',
     phone: '+254 712 244 494',
     whatsapp: '+254 712 244 494',
@@ -53,17 +53,17 @@ export const siteContent: SiteContent = {
     hours: 'Mon – Fri: 8:00 AM – 5:00 PM EAT'
   },
   metrics: {
-    appraisedVolume: '[Content Placeholder: KES XX Appraised]',
+    appraisedVolume: 'KES 11B+',
     appraisedVolumeLabel: 'Total Value Appraised',
-    turnaroundTime: '[Content Placeholder: XX Hours]',
-    turnaroundTimeLabel: 'Average Turnaround',
-    rentCollectionRate: '[Content Placeholder: XX%]',
+    turnaroundTime: ' 1 Hour',
+    turnaroundTimeLabel: 'Average Inquiry Turnaround',
+    rentCollectionRate: '8%',
     rentCollectionRateLabel: 'Rent Collection Rate'
   },
   agency: {
-    commissionRate: '[Content Placeholder: XX% Standard Commission]',
-    marketingReach: '[Content Placeholder: XX+ Verified Buyers & Tenants]',
-    averageDaysOnMarket: '[Content Placeholder: XX Days Average]'
+    commissionRate: '% Standard Commission',
+    marketingReach: '1000+ Verified Buyers & Tenants',
+    averageDaysOnMarket: '14 Days Average'
   },
   listings: [
     {
@@ -109,10 +109,16 @@ export const siteContent: SiteContent = {
   ],
   team: [
     {
-      name: '[Content Placeholder: Director Name]',
+      name: 'Joseph Mutura Kamanu',
       title: 'Principal Registered Valuer',
-      vrbNumber: 'VRB No. [Placeholder]',
-      bio: '[Content Placeholder: Verified professional background and track record.]'
+      iskNumber: 'ISK No. 818',
+      bio: 'Full member of the Institution of Surveyors of Kenya; Registered valuer with the Valuers Registration Board'
+    },
+    {
+      name: 'Arphaxad Abincha Manono',
+      title: 'Realtor',
+      iskNumber: 'ISK No. 7013',
+      bio: 'Member of the Institution of Surveyors of Kenya'
     }
   ]
 };
