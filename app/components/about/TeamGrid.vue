@@ -22,7 +22,7 @@ import { siteContent } from '~/content/site'
           </div>
           <h3 class="font-display font-bold text-text-primary mb-1">{{ member.name }}</h3>
           <p class="text-sm text-brand-600 font-semibold mb-1">{{ member.title }}</p>
-          <p class="text-xs text-text-muted mb-3">{{ member.vrbNumber }}</p>
+          <p class="text-xs text-text-muted mb-3">{{ member.iskNumber }}</p>
           <p class="text-sm text-text-muted leading-relaxed">{{ member.bio }}</p>
         </div>
       </div>
