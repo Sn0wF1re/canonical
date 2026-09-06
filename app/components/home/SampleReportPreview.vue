@@ -1,23 +1,22 @@
 <script setup lang="ts">
 const certificate = {
-  refNo: 'CR/VRB/2026/XXXX',
-  date: '[Date of Inspection]',
+  refNo: 'CRL/COMPANY/2026',
+  date: '21/07/2026',
   property: {
-    description: '[Property Description]',
-    location: '[Location, Nairobi]',
-    titleRef: '[Title Deed Reference]'
+    description: 'Commercial',
+    location: 'Kitengela, Nairobi',
+    landRef: '1234/67'
   },
   values: [
-    { label: 'Market Value', amount: '[Content Placeholder: KES XX,XXX,XXX]' },
-    { label: 'Mortgage Lending Value', amount: '[Content Placeholder: KES XX,XXX,XXX]' },
-    { label: 'Insurance Reinatement', amount: '[Content Placeholder: KES XX,XXX,XXX]' }
+    { label: 'Market Value', amount: 'KES 7,000,000' },
+    { label: 'Mortgage Lending Value', amount: 'KES 6,300,000' },
   ],
-  methodology: '[Content Placeholder: Valuation Methodology Applied]',
+  methodology: 'Income',
   compliance: 'IFRS 13 · VRB Act Cap 532 · ISK Guidelines',
   valuer: {
-    name: '[Content Placeholder: Valuer Name]',
+    name: 'Joseph Mutura Kamanu',
     title: 'Principal Registered Valuer',
-    vrbNo: 'VRB No. [Placeholder]'
+    iskNo: 'ISK No. 818'
   }
 }
 </script>
@@ -66,8 +65,8 @@ const certificate = {
                 <span class="block text-sm text-white font-medium">{{ certificate.property.location }}</span>
               </div>
               <div>
-                <span class="block text-[10px] text-white/40 uppercase tracking-wider mb-1">Title Ref</span>
-                <span class="block text-sm text-white font-medium">{{ certificate.property.titleRef }}</span>
+                <span class="block text-[10px] text-white/40 uppercase tracking-wider mb-1">Land Ref</span>
+                <span class="block text-sm text-white font-medium">{{ certificate.property.landRef }}</span>
               </div>
               <div>
                 <span class="block text-[10px] text-white/40 uppercase tracking-wider mb-1">Date</span>
@@ -99,7 +98,7 @@ const certificate = {
               <div>
                 <p class="text-sm font-semibold text-white">{{ certificate.valuer.name }}</p>
                 <p class="text-xs text-white/50">{{ certificate.valuer.title }}</p>
-                <p class="text-xs text-brand-500/70">{{ certificate.valuer.vrbNo }}</p>
+                <p class="text-xs text-brand-500/70">{{ certificate.valuer.iskNo }}</p>
               </div>
               <div class="text-right">
                 <div class="w-16 h-px bg-white/20 mb-1" />
