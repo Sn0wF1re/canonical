@@ -5,7 +5,7 @@ const { elementRef: headingRef, isRevealed } = useReveal()
 
 const monthlyRentPerUnit = ref(50000)
 const totalUnits = ref(10)
-const managementFeeRate = 0.07
+const managementFeeRate = 0.08
 
 const grossMonthlyRevenue = computed(() => monthlyRentPerUnit.value * totalUnits.value)
 const estimatedManagementFee = computed(() => grossMonthlyRevenue.value * managementFeeRate)
@@ -59,7 +59,7 @@ const formatKES = (val: number) => {
               <span class="text-lg font-mono font-medium text-white">{{ formatKES(grossMonthlyRevenue) }}</span>
             </div>
             <div>
-              <span class="block text-xs text-white/50 uppercase">Estimated Fee (7%)</span>
+              <span class="block text-xs text-white/50 uppercase">Estimated Fee (8%)</span>
               <span class="text-sm font-mono text-white/80">{{ formatKES(estimatedManagementFee) }}</span>
             </div>
             <div class="pt-3 border-t border-dark-muted">
