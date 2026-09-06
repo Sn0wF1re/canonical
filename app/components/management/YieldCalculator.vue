@@ -65,6 +65,7 @@ const formatKES = (val: number) => {
             <div class="pt-3 border-t border-dark-muted">
               <span class="block text-xs text-brand-500 uppercase font-semibold">Estimated Net Disbursement</span>
               <span class="text-2xl font-mono font-bold text-brand-500">{{ formatKES(netLandlordPayout) }}</span>
+              <span class="block text-[11px] text-white/40 mt-1">Exclusive of VAT</span>
             </div>
           </div>
         </div>
