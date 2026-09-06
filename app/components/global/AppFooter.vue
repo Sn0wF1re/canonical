@@ -75,6 +75,14 @@ import { siteContent } from '~/content/site'
           VRB: {{ siteContent.company.vrbRegistration }} | ISK: {{ siteContent.company.iskMembership }} | EARB: {{ siteContent.company.earbRegistration }}
         </p>
       </div>
+      <div class="mt-6 flex justify-center gap-6">
+        <NuxtLink to="/privacy-policy" class="text-xs text-white/40 hover:text-brand-500 transition-colors">
+          Privacy Policy
+        </NuxtLink>
+        <NuxtLink to="/terms-conditions" class="text-xs text-white/40 hover:text-brand-500 transition-colors">
+          Terms & Conditions
+        </NuxtLink>
+      </div>
     </div>
   </footer>
 </template>
