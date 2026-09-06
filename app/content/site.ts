@@ -55,7 +55,7 @@ export const siteContent: SiteContent = {
   metrics: {
     appraisedVolume: 'KES 11B+',
     appraisedVolumeLabel: 'Total Value Appraised',
-    turnaroundTime: ' 1 Hour',
+    turnaroundTime: '1 Hour',
     turnaroundTimeLabel: 'Average Inquiry Turnaround',
     rentCollectionRate: '8%',
     rentCollectionRateLabel: 'Rent Collection Rate'
