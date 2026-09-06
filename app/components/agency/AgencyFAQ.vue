@@ -4,7 +4,7 @@ import { siteContent } from '~/content/site'
 const faqs = [
   {
     label: 'What commission do you charge?',
-    content: `We work on a success-based commission agreed in writing before any listing goes live. Standard rates are ${siteContent.agency.commissionRate} depending on property type and mandate scope — with no hidden charges.`
+    content: `We work on a success-based commission agreed in writing before any listing goes live. Standard rates are dependent on property type and mandate scope — with no hidden charges.`
   },
   {
     label: 'Are you a licensed estate agency?',

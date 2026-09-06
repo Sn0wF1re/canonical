@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const faqs = [
-  { label: 'What is your management fee?', content: 'Our standard management fee is 7% of gross monthly rental income. This includes tenant management, rent collection, maintenance coordination, and monthly reporting. Exact terms are agreed upon during onboarding.' },
+  { label: 'What is your management fee?', content: 'Our standard management fee is 8% of gross monthly rental income. This includes tenant management, rent collection, maintenance coordination, and monthly reporting. Exact terms are agreed upon during onboarding.' },
   { label: 'How do you handle tenant screening?', content: 'We conduct comprehensive background checks including employment verification, credit history, previous landlord references, and identification verification. Only qualified tenants are approved.' },
   { label: 'How quickly do you fill vacancies?', content: 'Average vacancy periods depend on property type and location. Our digital marketing and extensive tenant database typically achieve occupancy within 2-4 weeks for well-priced properties.' },
   { label: 'What maintenance is included?', content: 'Routine maintenance, emergency repairs, scheduled inspections, and preventive maintenance programs are all managed. Major capital works are quoted separately with landlord approval.' },
