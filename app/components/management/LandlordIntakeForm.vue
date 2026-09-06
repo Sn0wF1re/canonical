@@ -77,6 +77,10 @@ function handleSubmit() {
         <UButton type="submit" color="primary" size="lg" block trailing-icon="i-lucide-send">
           Submit Inquiry
         </UButton>
+        <p class="text-xs text-text-muted text-center">
+          By submitting, you agree to our
+          <NuxtLink to="/privacy-policy" class="underline hover:text-text-primary transition-colors">Privacy Policy</NuxtLink>.
+        </p>
       </form>
     </div>
   </section>
