@@ -26,12 +26,13 @@ export default defineEventHandler(async (event) => {
   // 3. Uncomment below and remove console.log above
   //
   // import { Resend } from 'resend'
+  // import { emailDisclaimer } from '~~/app/content/legal'
   // const resend = new Resend(process.env.RESEND_API_KEY)
   // await resend.emails.send({
   //   from: 'Canonical Realty <info@canonicalrealty.com>',
   //   to: 'info@canonicalrealty.com',
   //   subject: `[${inquiryType || 'General'}] ${subject || 'New inquiry from ' + fullName}`,
-  //   html: `...`
+  //   html: `<p><strong>${fullName}</strong> (${email}${phone ? `, ${phone}` : ''})</p><p>${message}</p><hr /><p><small>${emailDisclaimer}</small></p>`
   // })
 
   return { success: true, message: 'Your inquiry has been received. We will respond within one business day.' }
