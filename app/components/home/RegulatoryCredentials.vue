@@ -4,13 +4,13 @@ import { siteContent } from '~/content/site'
 const credentials = [
   {
     icon: 'i-lucide-badge-check',
-    title: 'VRB Registered',
+    title: 'VRB Regulated',
     detail: siteContent.company.vrbRegistration,
     description: 'Valuation Registration Board of Kenya'
   },
   {
     icon: 'i-lucide-building-2',
-    title: 'ISK Member',
+    title: 'ISK Membership',
     detail: siteContent.company.iskMembership,
     description: 'Institutional Property Surveyors of Kenya'
   },

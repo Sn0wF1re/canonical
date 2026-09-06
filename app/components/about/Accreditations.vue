@@ -4,8 +4,8 @@ import { siteContent } from '~/content/site'
 const { elementRef: headingRef, isRevealed } = useReveal()
 
 const accreditations = [
-  { icon: 'i-lucide-badge-check', title: 'VRB Registered', detail: siteContent.company.vrbRegistration, description: 'Valuation Registration Board of Kenya — all valuations conducted by registered professionals.' },
-  { icon: 'i-lucide-building-2', title: 'ISK Corporate Member', detail: siteContent.company.iskMembership, description: 'Institutional Property Surveyors of Kenya — committed to professional standards.' },
+  { icon: 'i-lucide-badge-check', title: 'VRB Regulated', detail: siteContent.company.vrbRegistration, description: 'Valuation Registration Board of Kenya — all valuations conducted by registered members of the board.' },
+  { icon: 'i-lucide-building-2', title: 'ISK Membership', detail: siteContent.company.iskMembership, description: 'Institution of Surveyors of Kenya — Our realtors are registered and regulated by ISK, and committed to professional standards.' },
   { icon: 'i-lucide-book-open', title: 'IFRS Red Book', detail: 'Compliant', description: 'Valuation reports conform to International Financial Reporting Standards.' }
 ]
 </script>
