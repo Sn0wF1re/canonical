@@ -10,7 +10,7 @@
         <h3 class="font-display font-bold text-white">Response Guarantee</h3>
       </div>
       <p class="text-white/60 max-w-xl mx-auto">
-        We respond to all inquiries within one business day. For urgent matters, call us directly or reach out via WhatsApp.
+        We respond to all inquiries within one hour. For urgent matters, call us directly or reach out via WhatsApp.
       </p>
     </div>
   </section>

@@ -28,7 +28,7 @@
           Get In Touch
         </h1>
         <p class="text-lg text-white/60 leading-relaxed">
-          Ready to start? Reach out via phone, email, or fill in the form below. We respond within one business day.
+          Ready to start? Reach out via phone, email, or fill in the form below. We respond within one hour.
         </p>
       </div>
     </div>
