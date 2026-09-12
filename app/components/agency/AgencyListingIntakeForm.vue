@@ -16,8 +16,46 @@ const form = reactive({
   message: ''
 })
 
-function handleSubmit() {
-  submitted.value = true
+const honeypot = ref('')
+const sending = ref(false)
+const errorMessage = ref('')
+const turnstileToken = ref('')
+const loadedAt = Date.now()
+const { enabled: turnstileEnabled, waitToken } = useTurnstile()
+
+async function handleSubmit() {
+  errorMessage.value = ''
+  sending.value = true
+  try {
+    const token = await waitToken(turnstileToken)
+    await $fetch('/api/contact', {
+      method: 'POST',
+      body: {
+        type: 'agency',
+        fullName: form.fullName,
+        email: form.email,
+        phone: form.phone,
+        message: form.message,
+        details: {
+          'Intake Mode': mode.value === 'owner' ? 'Property Owner' : 'Buyer / Tenant',
+          'Property Type': form.propertyType,
+          'Property Location': form.location,
+          'Looking To': form.intent,
+          'Listing Intent / Budget': form.budget,
+          'Asking Price': form.askingPrice
+        },
+        website: honeypot.value,
+        token,
+        loadedAt
+      }
+    })
+    submitted.value = true
+  } catch (error) {
+    errorMessage.value = (error as { data?: { message?: string } })?.data?.message
+      ?? 'Something went wrong sending your inquiry. Please try again, or reach us on WhatsApp.'
+  } finally {
+    sending.value = false
+  }
 }
 </script>
 
@@ -36,6 +74,7 @@ function handleSubmit() {
       </div>
 
       <form v-else @submit.prevent="handleSubmit" class="bg-white border border-border-main rounded-xl p-6 sm:p-8 space-y-5">
+        <input v-model="honeypot" type="text" name="website" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true" />
         <!-- Mode Toggle -->
         <div class="flex flex-col sm:flex-row gap-2 p-1 bg-light-muted rounded-lg">
           <button
@@ -107,8 +146,14 @@ function handleSubmit() {
           <textarea v-model="form.message" rows="4" placeholder="Tell us about the property or your requirements..." class="w-full px-4 py-3 bg-light-bg border border-border-main rounded-lg text-sm text-text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent resize-none" />
         </div>
 
-        <UButton type="submit" color="primary" size="lg" block trailing-icon="i-lucide-send">
-          Submit Inquiry
+        <div v-if="errorMessage" class="bg-red-50 border border-red-200 rounded-lg px-4 py-3">
+          <p class="text-sm text-red-700 text-center">{{ errorMessage }}</p>
+        </div>
+
+        <TurnstileChallenge v-if="turnstileEnabled" v-model="turnstileToken" />
+
+        <UButton type="submit" color="primary" size="lg" block trailing-icon="i-lucide-send" :disabled="sending">
+          {{ sending ? 'Sending…' : 'Submit Inquiry' }}
         </UButton>
         <p class="text-xs text-text-muted text-center">
           By submitting, you agree to our

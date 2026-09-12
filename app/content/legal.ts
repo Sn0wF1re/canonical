@@ -59,7 +59,8 @@ export const privacyPolicy: LegalDocument = {
     {
       heading: 'Cookies and Website Data',
       paragraphs: [
-        'This website uses only strictly necessary technical storage required for the site to function. We do not use advertising or cross-site tracking cookies: [Content Placeholder: confirm analytics/cookie position].'
+        'Our contact forms are protected by Cloudflare Turnstile, which runs a security check in your browser to distinguish humans from bots. Turnstile does not set advertising or tracking cookies.',
+        'This website otherwise uses only strictly necessary technical storage required for the site to function. We do not use advertising or cross-site tracking cookies: [Content Placeholder: confirm analytics/analytics-cookie position before adding any tool].'
       ]
     },
     {

@@ -2,10 +2,11 @@
 import { ref } from 'vue'
 
 type ServiceMode = 'valuation' | 'management' | 'agency'
+type FieldName = 'fullName' | 'email' | 'phone' | 'propertyType' | 'units' | 'currentOccupancy' | 'interest' | 'location'
 
 const selectedService = ref<ServiceMode>('valuation')
 
-const fieldsByService: Record<ServiceMode, Array<{ name: string; label: string; placeholder: string }>> = {
+const fieldsByService: Record<ServiceMode, Array<{ name: FieldName; label: string; placeholder: string }>> = {
   valuation: [
     { name: 'fullName', label: 'Full Name', placeholder: 'John Kamau' },
     { name: 'email', label: 'Email Address', placeholder: 'john@example.com' },
@@ -27,6 +28,72 @@ const fieldsByService: Record<ServiceMode, Array<{ name: string; label: string; 
     { name: 'interest', label: 'I Want To', placeholder: 'e.g. Buy, Sell, or Rent' },
     { name: 'location', label: 'Preferred Location', placeholder: 'e.g. Karen, Nairobi' }
   ]
+const MODE_LABELS: Record<ServiceMode, string> = {
+  valuation: 'Valuation Request',
+  management: 'Property Management',
+  agency: 'Buy / Sell / Rent'
+}
+
+const form = reactive({
+  fullName: '',
+  email: '',
+  phone: '',
+  propertyType: '',
+  units: '',
+  currentOccupancy: '',
+  interest: '',
+  location: '',
+  message: ''
+})
+
+const honeypot = ref('')
+const submitted = ref(false)
+const sending = ref(false)
+const errorMessage = ref('')
+const turnstileToken = ref('')
+const loadedAt = Date.now()
+const { enabled: turnstileEnabled, waitToken } = useTurnstile()
+
+const SERVICE_TYPES: Record<ServiceMode, string> = {
+  valuation: 'valuation',
+  management: 'management',
+  agency: 'agency'
+}
+
+async function handleSubmit() {
+  errorMessage.value = ''
+  sending.value = true
+  try {
+    const token = await waitToken(turnstileToken)
+    const base = {
+      fullName: form.fullName,
+      email: form.email,
+      phone: form.phone,
+      message: form.message
+    }
+    const details: Record<string, string> = { 'Inquiry Mode': MODE_LABELS[selectedService.value] }
+    if (selectedService.value === 'valuation') {
+      details['Property Type'] = form.propertyType
+      details['Property Location'] = form.location
+    } else if (selectedService.value === 'management') {
+      details['Number of Units'] = form.units
+      details['Current Occupancy Rate'] = form.currentOccupancy
+    } else {
+      details['Interest'] = form.interest
+      details['Preferred Location'] = form.location
+    }
+
+    await $fetch('/api/contact', {
+      method: 'POST',
+      body: { type: SERVICE_TYPES[selectedService.value], ...base, details, website: honeypot.value, token, loadedAt }
+    })
+    submitted.value = true
+  } catch (error) {
+    errorMessage.value = (error as { data?: { message?: string } })?.data?.message
+      ?? 'Something went wrong sending your inquiry. Please try again, or reach us on WhatsApp.'
+  } finally {
+    sending.value = false
+  }
 }
 </script>
 
@@ -64,15 +131,18 @@ const fieldsByService: Record<ServiceMode, Array<{ name: string; label: string; 
           </button>
         </div>
 
-        <form class="space-y-5">
+        <form @submit.prevent="handleSubmit" class="space-y-5">
+          <input v-model="honeypot" type="text" name="website" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true" />
           <div v-for="field in fieldsByService[selectedService]" :key="field.name">
             <label :for="field.name" class="block text-xs font-semibold uppercase tracking-wider text-text-muted mb-2">
               {{ field.label }}
             </label>
             <input
               :id="field.name"
+              v-model="form[field.name]"
               :name="field.name"
               :placeholder="field.placeholder"
+              :required="['fullName', 'email', 'phone'].includes(field.name)"
               class="w-full px-4 py-3 bg-light-bg border border-border-main rounded-lg text-sm text-text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all"
             />
           </div>
@@ -82,13 +152,18 @@ const fieldsByService: Record<ServiceMode, Array<{ name: string; label: string; 
             </label>
             <textarea
               id="message"
+              v-model="form.message"
               rows="3"
               placeholder="Tell us about your requirements..."
               class="w-full px-4 py-3 bg-light-bg border border-border-main rounded-lg text-sm text-text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all resize-none"
             />
           </div>
-          <UButton type="submit" color="primary" size="lg" block trailing-icon="i-lucide-send">
-            Submit Inquiry
+          <div v-if="errorMessage" class="bg-red-50 border border-red-200 rounded-lg px-4 py-3">
+            <p class="text-sm text-red-700 text-center">{{ errorMessage }}</p>
+          </div>
+          <TurnstileChallenge v-if="turnstileEnabled" v-model="turnstileToken" />
+          <UButton type="submit" color="primary" size="lg" block trailing-icon="i-lucide-send" :disabled="sending">
+            {{ sending ? 'Sending…' : 'Submit Inquiry' }}
           </UButton>
           <p class="text-xs text-text-muted text-center">
             By submitting, you agree to our
