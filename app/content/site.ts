@@ -16,8 +16,8 @@ export interface SiteContent {
     appraisedVolumeLabel: string;
     turnaroundTime: string;
     turnaroundTimeLabel: string;
-    rentCollectionRate: string;
-    rentCollectionRateLabel: string;
+    managementFee: string;
+    managementFeeLabel: string;
   };
   agency: {
     commissionRate: string;
@@ -57,8 +57,8 @@ export const siteContent: SiteContent = {
     appraisedVolumeLabel: 'Total Value Appraised',
     turnaroundTime: '1 Hour',
     turnaroundTimeLabel: 'Average Inquiry Turnaround',
-    rentCollectionRate: '8%',
-    rentCollectionRateLabel: 'Rent Collection Rate'
+    managementFee: '8%',
+    managementFeeLabel: 'Management Fee'
   },
   agency: {
     commissionRate: '% Standard Commission',
