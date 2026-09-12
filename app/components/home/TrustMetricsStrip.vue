@@ -13,9 +13,9 @@ const metrics = [
     icon: 'i-lucide-clock'
   },
   {
-    value: siteContent.metrics.managementFee,
-    label: siteContent.metrics.managementFeeLabel,
-    icon: 'i-lucide-percent'
+    value: siteContent.metrics.rentCollectionRate,
+    label: siteContent.metrics.rentCollectionRateLabel,
+    icon: 'i-lucide-shield-check'
   }
 ]
 </script>
