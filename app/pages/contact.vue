@@ -1,9 +1,7 @@
 <script setup lang="ts">
 definePageMeta({ layout: 'default' })
 
-useHead({
-  title: 'Contact Us'
-})
+usePageSeo('contact')
 </script>
 
 <template>

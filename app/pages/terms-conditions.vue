@@ -3,9 +3,7 @@ import { termsConditions } from '~/content/legal'
 
 definePageMeta({ layout: 'default' })
 
-useHead({
-  title: 'Terms & Conditions'
-})
+usePageSeo('terms-conditions')
 </script>
 
 <template>

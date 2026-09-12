@@ -1,9 +1,7 @@
 <script setup lang="ts">
 definePageMeta({ layout: 'default' })
 
-useHead({
-  title: 'Estate Agency'
-})
+usePageSeo('estate-agency')
 </script>
 
 <template>

@@ -3,9 +3,7 @@ import { privacyPolicy } from '~/content/legal'
 
 definePageMeta({ layout: 'default' })
 
-useHead({
-  title: 'Privacy Policy'
-})
+usePageSeo('privacy-policy')
 </script>
 
 <template>

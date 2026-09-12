@@ -1,9 +1,7 @@
 <script setup lang="ts">
 definePageMeta({ layout: 'default' })
 
-useHead({
-  title: 'Valuation Services'
-})
+usePageSeo('valuation')
 </script>
 
 <template>
