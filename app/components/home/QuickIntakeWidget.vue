@@ -28,6 +28,8 @@ const fieldsByService: Record<ServiceMode, Array<{ name: FieldName; label: strin
     { name: 'interest', label: 'I Want To', placeholder: 'e.g. Buy, Sell, or Rent' },
     { name: 'location', label: 'Preferred Location', placeholder: 'e.g. Karen, Nairobi' }
   ]
+}
+
 const MODE_LABELS: Record<ServiceMode, string> = {
   valuation: 'Valuation Request',
   management: 'Property Management',

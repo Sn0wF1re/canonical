@@ -48,7 +48,6 @@ export default defineNuxtConfig({
         { property: 'og:type', content: 'website' },
         { property: 'og:title', content: 'Canonical Realty — Valuation & Property Management' },
         { property: 'og:description', content: "Kenya's trusted partner for decision-grade property valuation and professional management." },
-        { property: 'og:site_name', content: 'Canonical Realty' },
         { property: 'og:image', content: 'https://canonicalrealty.com/og-image.jpg' },
         { property: 'og:image:width', content: '1200' },
         { property: 'og:image:height', content: '630' },
