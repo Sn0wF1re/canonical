@@ -2,7 +2,9 @@ import { seoMeta, type SeoKey } from '~/content/seo'
 
 export function usePageSeo(key: SeoKey) {
   const entry = seoMeta[key]
-  const canonical = `https://canonicalrealty.com${entry.path}`
+  const config = useRuntimeConfig()
+  const base = String(config.public.siteUrl).replace(/\/$/, '')
+  const canonical = `${base}${entry.path}`
 
   useSeoMeta({
     title: entry.title,

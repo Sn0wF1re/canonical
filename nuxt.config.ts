@@ -24,7 +24,8 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      turnstileSiteKey: ''
+      turnstileSiteKey: '',
+      siteUrl: 'https://canonicalrealty.com'
     }
   },
   ui: {
