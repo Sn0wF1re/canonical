@@ -27,6 +27,8 @@ const faqs = [
     content: 'Every prospective buyer or tenant is screened before viewings: identification verification, financial pre-qualification, and — for tenancies — employment and reference checks.'
   }
 ]
+
+useFaqSchema(faqs)
 </script>
 
 <template>

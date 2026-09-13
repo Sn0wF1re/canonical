@@ -7,6 +7,8 @@ const faqs = [
   { label: 'How do I receive my rental income?', content: 'Monthly disbursements are made via bank transfer by the 15th of each month. A detailed statement accompanies every disbursement showing all income and expenses.' },
   { label: 'Can I terminate the management agreement?', content: 'Yes. Our agreements include a standard 60-day notice period. All tenant records, financial statements, and property documentation are transferred upon termination.' }
 ]
+
+useFaqSchema(faqs)
 </script>
 
 <template>

@@ -7,6 +7,8 @@ const faqs = [
   { label: 'Do you valuate properties outside Nairobi?', content: 'Yes. We cover all counties in Kenya. Our team has experience with urban, peri-urban, and rural properties across the country.' },
   { label: 'What are your valuation fees?', content: 'Fees depend on property type, location, and complexity. Contact us for a detailed quotation. We provide transparent pricing with no hidden costs.' }
 ]
+
+useFaqSchema(faqs)
 </script>
 
 <template>
