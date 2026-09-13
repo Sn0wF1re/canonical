@@ -73,21 +73,39 @@ export default defineEventHandler(async (event) => {
   const turnstileSecret = process.env.TURNSTILE_SECRET_KEY
   if (turnstileSecret) {
     const token = String(body?.token ?? '')
-    if (!token) {
-      console.warn('[Contact] rejected: no turnstile token')
+    const action = String(body?.action ?? '')
+    const VALID_ACTIONS = new Set(['valuation', 'management', 'agency', 'contact', 'quick-intake'])
+    const allowedHostnames = new Set(['canonicalrealty.com', 'www.canonicalrealty.com'])
+    if (process.env.NODE_ENV !== 'production') {
+      allowedHostnames.add('localhost')
+      allowedHostnames.add('127.0.0.1')
+    }
+
+    if (!token || token.length > 2048) {
+      console.warn('[Contact] rejected: missing or oversized turnstile token')
       return { success: true, message: 'Your inquiry has been received. We will respond within one business day.' }
     }
+
     try {
-      const verification = await $fetch<{ success: boolean }>('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
-        method: 'POST',
-        body: {
-          secret: turnstileSecret,
-          response: token,
-          remoteip: clientIp
+      const verification = await $fetch<{ success: boolean; action?: string; hostname?: string }>(
+        'https://challenges.cloudflare.com/turnstile/v0/siteverify',
+        {
+          method: 'POST',
+          signal: AbortSignal.timeout(10_000),
+          body: {
+            secret: turnstileSecret,
+            response: token,
+            remoteip: clientIp
+          }
         }
-      })
-      if (!verification.success) {
-        console.warn('[Contact] rejected: turnstile verification failed')
+      )
+      const actionOk = VALID_ACTIONS.has(action) && verification.action === action
+      const hostOk = allowedHostnames.has(String(verification.hostname ?? ''))
+      if (!verification.success || !actionOk || !hostOk) {
+        console.warn(
+          '[Contact] rejected: turnstile verification failed',
+          `(success=${verification.success} action=${verification.action ?? '-'} hostname=${verification.hostname ?? '-'})`
+        )
         return { success: true, message: 'Your inquiry has been received. We will respond within one business day.' }
       }
       verifiedAsHuman = true

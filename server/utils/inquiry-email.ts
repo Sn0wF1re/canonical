@@ -7,6 +7,7 @@ export interface InquiryPayload {
   details?: Record<string, string | undefined>
   website?: string
   token?: string
+  action?: string
   loadedAt?: number
 }
 
