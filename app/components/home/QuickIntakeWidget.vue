@@ -55,6 +55,7 @@ const errorMessage = ref('')
 const turnstileToken = ref('')
 const loadedAt = Date.now()
 const { enabled: turnstileEnabled, waitToken } = useTurnstile()
+const turnstileRef = ref<{ reset: () => void } | null>(null)
 
 const SERVICE_TYPES: Record<ServiceMode, string> = {
   valuation: 'valuation',
@@ -87,13 +88,14 @@ async function handleSubmit() {
 
     await $fetch('/api/contact', {
       method: 'POST',
-      body: { type: SERVICE_TYPES[selectedService.value], ...base, details, website: honeypot.value, token, loadedAt }
+      body: { type: SERVICE_TYPES[selectedService.value], action: SERVICE_TYPES[selectedService.value], ...base, details, website: honeypot.value, token, loadedAt }
     })
     submitted.value = true
   } catch (error) {
     errorMessage.value = (error as { data?: { message?: string } })?.data?.message
       ?? 'Something went wrong sending your inquiry. Please try again, or reach us on WhatsApp.'
   } finally {
+    turnstileRef.value?.reset()
     sending.value = false
   }
 }
@@ -163,7 +165,7 @@ async function handleSubmit() {
           <div v-if="errorMessage" class="bg-red-50 border border-red-200 rounded-lg px-4 py-3">
             <p class="text-sm text-red-700 text-center">{{ errorMessage }}</p>
           </div>
-          <TurnstileChallenge v-if="turnstileEnabled" v-model="turnstileToken" />
+          <TurnstileChallenge v-if="turnstileEnabled" ref="turnstileRef" v-model="turnstileToken" :action="SERVICE_TYPES[selectedService]" />
           <UButton type="submit" color="primary" size="lg" block trailing-icon="i-lucide-send" :disabled="sending">
             {{ sending ? 'Sending…' : 'Submit Inquiry' }}
           </UButton>

@@ -17,6 +17,7 @@ const errorMessage = ref('')
 const turnstileToken = ref('')
 const loadedAt = Date.now()
 const { enabled: turnstileEnabled, waitToken } = useTurnstile()
+const turnstileRef = ref<{ reset: () => void } | null>(null)
 
 async function handleSubmit() {
   errorMessage.value = ''
@@ -39,6 +40,7 @@ async function handleSubmit() {
         },
         website: honeypot.value,
         token,
+        action: 'management',
         loadedAt
       }
     })
@@ -47,6 +49,7 @@ async function handleSubmit() {
     errorMessage.value = (error as { data?: { message?: string } })?.data?.message
       ?? 'Something went wrong sending your inquiry. Please try again, or reach us on WhatsApp.'
   } finally {
+    turnstileRef.value?.reset()
     sending.value = false
   }
 }
@@ -114,7 +117,7 @@ async function handleSubmit() {
           <p class="text-sm text-red-700 text-center">{{ errorMessage }}</p>
         </div>
 
-        <TurnstileChallenge v-if="turnstileEnabled" v-model="turnstileToken" />
+        <TurnstileChallenge v-if="turnstileEnabled" ref="turnstileRef" v-model="turnstileToken" action="management" />
 
         <UButton type="submit" color="primary" size="lg" block trailing-icon="i-lucide-send" :disabled="sending">
           {{ sending ? 'Sending…' : 'Submit Inquiry' }}

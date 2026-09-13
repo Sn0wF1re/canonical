@@ -2,6 +2,8 @@
 const config = useRuntimeConfig()
 const siteKey = config.public.turnstileSiteKey as string
 
+const props = withDefaults(defineProps<{ action?: string }>(), { action: '' })
+
 const token = defineModel<string>({ default: '' })
 const container = ref<HTMLElement | null>(null)
 let widgetId: unknown = null
@@ -10,6 +12,7 @@ function renderWidget() {
   if (!container.value || !window.turnstile || widgetId) return
   widgetId = window.turnstile.render(container.value, {
     sitekey: siteKey,
+    action: props.action || undefined,
     theme: 'light',
     callback: (value: string) => { token.value = value },
     'expired-callback': () => { token.value = '' },
@@ -17,16 +20,31 @@ function renderWidget() {
   })
 }
 
+function reset() {
+  token.value = ''
+  if (window.turnstile && widgetId) {
+    window.turnstile.reset(widgetId)
+  }
+}
+
 function loadScript(): Promise<void> {
   return new Promise((resolve) => {
-    if (window.turnstile) return renderWidget()
+    if (window.turnstile) {
+      renderWidget()
+      return resolve()
+    }
     const script = document.createElement('script')
     script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit'
     script.async = true
-    script.onload = () => renderWidget()
+    script.onload = () => {
+      renderWidget()
+      resolve()
+    }
     document.head.appendChild(script)
   })
 }
+
+defineExpose({ reset })
 
 onMounted(() => {
   if (siteKey) loadScript()
