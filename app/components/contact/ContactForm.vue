@@ -31,6 +31,18 @@ const turnstileFailed = ref(false)
 const whatsappHref = `https://wa.me/${siteContent.company.whatsapp.replace(/[^0-9]/g, '')}`
 const phoneHref = `tel:${siteContent.company.phone.replace(/[^0-9+]/g, '')}`
 
+const fieldUi = { label: 'text-xs font-semibold uppercase tracking-wider text-text-muted' }
+
+function validate(state: typeof form) {
+  const errors: Array<{ name: string; message: string }> = []
+  if (!state.fullName) errors.push({ name: 'fullName', message: 'Full name is required' })
+  if (!state.email) errors.push({ name: 'email', message: 'Email address is required' })
+  else if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(state.email)) errors.push({ name: 'email', message: 'Enter a valid email address' })
+  if (!state.subject) errors.push({ name: 'subject', message: 'Subject is required' })
+  if (!state.message) errors.push({ name: 'message', message: 'Message is required' })
+  return errors
+}
+
 function retryTurnstile() {
   turnstileFailed.value = false
   errorMessage.value = ''
@@ -95,25 +107,35 @@ async function handleSubmit() {
         <p class="text-text-muted">Thank you, {{ form.fullName }}. We'll respond within one business day.</p>
       </div>
 
-      <form v-else @submit.prevent="handleSubmit" class="bg-white border border-border-main rounded-xl p-6 sm:p-8 space-y-5">
+      <UForm
+        v-else
+        :state="form"
+        :validate="validate"
+        class="bg-white border border-border-main rounded-xl p-6 sm:p-8 space-y-5"
+        @submit="handleSubmit"
+      >
         <input v-model="honeypot" type="text" name="website" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true" />
-        <div class="flex gap-2 p-1 bg-light-muted rounded-lg">
+
+        <div class="flex flex-col sm:flex-row gap-2 p-1 bg-light-muted rounded-lg">
           <button
-            @click.prevent="selectedType = 'valuation'"
+            type="button"
+            @click="selectedType = 'valuation'"
             class="flex-1 py-2.5 px-4 rounded-md text-sm font-semibold transition-all"
             :class="selectedType === 'valuation' ? 'bg-brand-500 text-dark-primary' : 'text-text-muted hover:text-text-primary'"
           >
             Valuation Request
           </button>
           <button
-            @click.prevent="selectedType = 'management'"
+            type="button"
+            @click="selectedType = 'management'"
             class="flex-1 py-2.5 px-4 rounded-md text-sm font-semibold transition-all"
             :class="selectedType === 'management' ? 'bg-brand-500 text-dark-primary' : 'text-text-muted hover:text-text-primary'"
           >
             Property Management
           </button>
           <button
-            @click.prevent="selectedType = 'general'"
+            type="button"
+            @click="selectedType = 'general'"
             class="flex-1 py-2.5 px-4 rounded-md text-sm font-semibold transition-all"
             :class="selectedType === 'general' ? 'bg-brand-500 text-dark-primary' : 'text-text-muted hover:text-text-primary'"
           >
@@ -122,35 +144,28 @@ async function handleSubmit() {
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          <div>
-            <label class="block text-xs font-semibold uppercase tracking-wider text-text-muted mb-2">Full Name *</label>
-            <input v-model="form.fullName" required placeholder="Your full name" class="w-full px-4 py-3 bg-light-bg border border-border-main rounded-lg text-sm text-text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent" />
-          </div>
-          <div>
-            <label class="block text-xs font-semibold uppercase tracking-wider text-text-muted mb-2">Email *</label>
-            <input v-model="form.email" type="email" required placeholder="you@example.com" class="w-full px-4 py-3 bg-light-bg border border-border-main rounded-lg text-sm text-text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent" />
-          </div>
+          <UFormField label="Full Name" name="fullName" required :ui="fieldUi">
+            <UInput v-model="form.fullName" placeholder="Your full name" class="w-full" />
+          </UFormField>
+          <UFormField label="Email" name="email" required :ui="fieldUi">
+            <UInput v-model="form.email" type="email" placeholder="you@example.com" class="w-full" />
+          </UFormField>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          <div>
-            <label class="block text-xs font-semibold uppercase tracking-wider text-text-muted mb-2">Phone</label>
-            <input v-model="form.phone" type="tel" placeholder="+254 7XX XXX XXX" class="w-full px-4 py-3 bg-light-bg border border-border-main rounded-lg text-sm text-text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent" />
-          </div>
-          <div>
-            <label class="block text-xs font-semibold uppercase tracking-wider text-text-muted mb-2">Subject *</label>
-            <input v-model="form.subject" required placeholder="Brief subject line" class="w-full px-4 py-3 bg-light-bg border border-border-main rounded-lg text-sm text-text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent" />
-          </div>
+          <UFormField label="Phone" name="phone" :ui="fieldUi">
+            <UInput v-model="form.phone" type="tel" placeholder="+254 7XX XXX XXX" class="w-full" />
+          </UFormField>
+          <UFormField label="Subject" name="subject" required :ui="fieldUi">
+            <UInput v-model="form.subject" placeholder="Brief subject line" class="w-full" />
+          </UFormField>
         </div>
 
-        <div>
-          <label class="block text-xs font-semibold uppercase tracking-wider text-text-muted mb-2">Message *</label>
-          <textarea v-model="form.message" rows="5" required placeholder="Tell us how we can help..." class="w-full px-4 py-3 bg-light-bg border border-border-main rounded-lg text-sm text-text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent resize-none" />
-        </div>
+        <UFormField label="Message" name="message" required :ui="fieldUi">
+          <UTextarea v-model="form.message" :rows="5" placeholder="Tell us how we can help..." class="w-full" />
+        </UFormField>
 
-        <div v-if="errorMessage" class="bg-red-50 border border-red-200 rounded-lg px-4 py-3">
-          <p class="text-sm text-red-700 text-center">{{ errorMessage }}</p>
-        </div>
+        <UAlert v-if="errorMessage" color="error" variant="soft" :title="errorMessage" />
 
         <TurnstileChallenge v-if="turnstileEnabled" ref="turnstileRef" v-model="turnstileToken" action="contact" />
 
@@ -181,7 +196,7 @@ async function handleSubmit() {
           By submitting, you agree to our
           <NuxtLink to="/privacy-policy" class="underline hover:text-text-primary transition-colors">Privacy Policy</NuxtLink>.
         </p>
-      </form>
+      </UForm>
     </div>
   </section>
 </template>

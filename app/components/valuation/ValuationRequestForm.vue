@@ -24,6 +24,19 @@ const turnstileFailed = ref(false)
 const whatsappHref = `https://wa.me/${siteContent.company.whatsapp.replace(/[^0-9]/g, '')}`
 const phoneHref = `tel:${siteContent.company.phone.replace(/[^0-9+]/g, '')}`
 
+const fieldUi = { label: 'text-xs font-semibold uppercase tracking-wider text-text-muted' }
+
+function validate(state: typeof form) {
+  const errors: Array<{ name: string; message: string }> = []
+  if (!state.fullName) errors.push({ name: 'fullName', message: 'Full name is required' })
+  if (!state.email) errors.push({ name: 'email', message: 'Email address is required' })
+  else if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(state.email)) errors.push({ name: 'email', message: 'Enter a valid email address' })
+  if (!state.phone) errors.push({ name: 'phone', message: 'Phone number is required' })
+  if (!state.propertyType) errors.push({ name: 'propertyType', message: 'Property type is required' })
+  if (!state.location) errors.push({ name: 'location', message: 'Property location is required' })
+  return errors
+}
+
 function retryTurnstile() {
   turnstileFailed.value = false
   errorMessage.value = ''
@@ -89,49 +102,47 @@ async function handleSubmit() {
         <p class="text-text-muted">Thank you, {{ form.fullName }}. Our team will contact you shortly.</p>
       </div>
 
-      <form v-else @submit.prevent="handleSubmit" class="bg-white border border-border-main rounded-xl p-6 sm:p-8 space-y-5">
+      <UForm
+        v-else
+        :state="form"
+        :validate="validate"
+        class="bg-white border border-border-main rounded-xl p-6 sm:p-8 space-y-5"
+        @submit="handleSubmit"
+      >
         <input v-model="honeypot" type="text" name="website" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true" />
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          <div>
-            <label class="block text-xs font-semibold uppercase tracking-wider text-text-muted mb-2">Full Name *</label>
-            <input v-model="form.fullName" required placeholder="John Kamau" class="w-full px-4 py-3 bg-light-bg border border-border-main rounded-lg text-sm text-text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent" />
-          </div>
-          <div>
-            <label class="block text-xs font-semibold uppercase tracking-wider text-text-muted mb-2">Email *</label>
-            <input v-model="form.email" type="email" required placeholder="john@example.com" class="w-full px-4 py-3 bg-light-bg border border-border-main rounded-lg text-sm text-text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent" />
-          </div>
-        </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          <div>
-            <label class="block text-xs font-semibold uppercase tracking-wider text-text-muted mb-2">Phone *</label>
-            <input v-model="form.phone" type="tel" required placeholder="+254 7XX XXX XXX" class="w-full px-4 py-3 bg-light-bg border border-border-main rounded-lg text-sm text-text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent" />
-          </div>
-          <div>
-            <label class="block text-xs font-semibold uppercase tracking-wider text-text-muted mb-2">Property Type *</label>
-            <input v-model="form.propertyType" required placeholder="e.g. Commercial, Residential" class="w-full px-4 py-3 bg-light-bg border border-border-main rounded-lg text-sm text-text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent" />
-          </div>
+          <UFormField label="Full Name" name="fullName" required :ui="fieldUi">
+            <UInput v-model="form.fullName" placeholder="John Kamau" class="w-full" />
+          </UFormField>
+          <UFormField label="Email" name="email" required :ui="fieldUi">
+            <UInput v-model="form.email" type="email" placeholder="john@example.com" class="w-full" />
+          </UFormField>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          <div>
-            <label class="block text-xs font-semibold uppercase tracking-wider text-text-muted mb-2">Property Location *</label>
-            <input v-model="form.location" required placeholder="e.g. Westlands, Nairobi" class="w-full px-4 py-3 bg-light-bg border border-border-main rounded-lg text-sm text-text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent" />
-          </div>
-          <div>
-            <label class="block text-xs font-semibold uppercase tracking-wider text-text-muted mb-2">Purpose of Valuation</label>
-            <input v-model="form.purpose" placeholder="e.g. Mortgage, Audit, Sale" class="w-full px-4 py-3 bg-light-bg border border-border-main rounded-lg text-sm text-text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent" />
-          </div>
+          <UFormField label="Phone" name="phone" required :ui="fieldUi">
+            <UInput v-model="form.phone" type="tel" placeholder="+254 7XX XXX XXX" class="w-full" />
+          </UFormField>
+          <UFormField label="Property Type" name="propertyType" required :ui="fieldUi">
+            <UInput v-model="form.propertyType" placeholder="e.g. Commercial, Residential" class="w-full" />
+          </UFormField>
         </div>
 
-        <div>
-          <label class="block text-xs font-semibold uppercase tracking-wider text-text-muted mb-2">Additional Details</label>
-          <textarea v-model="form.message" rows="4" placeholder="Any additional information about the property or your requirements..." class="w-full px-4 py-3 bg-light-bg border border-border-main rounded-lg text-sm text-text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent resize-none" />
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <UFormField label="Property Location" name="location" required :ui="fieldUi">
+            <UInput v-model="form.location" placeholder="e.g. Westlands, Nairobi" class="w-full" />
+          </UFormField>
+          <UFormField label="Purpose of Valuation" name="purpose" :ui="fieldUi">
+            <UInput v-model="form.purpose" placeholder="e.g. Mortgage, Audit, Sale" class="w-full" />
+          </UFormField>
         </div>
 
-        <div v-if="errorMessage" class="bg-red-50 border border-red-200 rounded-lg px-4 py-3">
-          <p class="text-sm text-red-700 text-center">{{ errorMessage }}</p>
-        </div>
+        <UFormField label="Additional Details" name="message" :ui="fieldUi">
+          <UTextarea v-model="form.message" :rows="4" placeholder="Any additional information about the property or your requirements..." class="w-full" />
+        </UFormField>
+
+        <UAlert v-if="errorMessage" color="error" variant="soft" :title="errorMessage" />
 
         <TurnstileChallenge v-if="turnstileEnabled" ref="turnstileRef" v-model="turnstileToken" action="valuation" />
 
@@ -162,7 +173,7 @@ async function handleSubmit() {
           By submitting, you agree to our
           <NuxtLink to="/privacy-policy" class="underline hover:text-text-primary transition-colors">Privacy Policy</NuxtLink>.
         </p>
-      </form>
+      </UForm>
     </div>
   </section>
 </template>

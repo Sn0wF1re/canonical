@@ -62,6 +62,17 @@ const turnstileFailed = ref(false)
 const whatsappHref = `https://wa.me/${siteContent.company.whatsapp.replace(/[^0-9]/g, '')}`
 const phoneHref = `tel:${siteContent.company.phone.replace(/[^0-9+]/g, '')}`
 
+const fieldUi = { label: 'text-xs font-semibold uppercase tracking-wider text-text-muted' }
+
+function validate(state: typeof form) {
+  const errors: Array<{ name: string; message: string }> = []
+  if (!state.fullName) errors.push({ name: 'fullName', message: 'Full name is required' })
+  if (!state.email) errors.push({ name: 'email', message: 'Email address is required' })
+  else if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(state.email)) errors.push({ name: 'email', message: 'Enter a valid email address' })
+  if (!state.phone) errors.push({ name: 'phone', message: 'Phone number is required' })
+  return errors
+}
+
 function retryTurnstile() {
   turnstileFailed.value = false
   errorMessage.value = ''
@@ -140,6 +151,7 @@ async function handleSubmit() {
       <div v-else class="bg-white border border-border-main rounded-xl p-6 sm:p-8 shadow-sm">
         <div class="flex flex-col sm:flex-row gap-2 mb-8 p-1 bg-light-muted rounded-lg">
           <button
+            type="button"
             @click="selectedService = 'valuation'"
             class="flex-1 py-2.5 px-4 rounded-md text-sm font-semibold transition-all"
             :class="selectedService === 'valuation' ? 'bg-brand-500 text-dark-primary' : 'text-text-muted hover:text-text-primary'"
@@ -147,6 +159,7 @@ async function handleSubmit() {
             Valuation Request
           </button>
           <button
+            type="button"
             @click="selectedService = 'management'"
             class="flex-1 py-2.5 px-4 rounded-md text-sm font-semibold transition-all"
             :class="selectedService === 'management' ? 'bg-brand-500 text-dark-primary' : 'text-text-muted hover:text-text-primary'"
@@ -154,6 +167,7 @@ async function handleSubmit() {
             Property Management
           </button>
           <button
+            type="button"
             @click="selectedService = 'agency'"
             class="flex-1 py-2.5 px-4 rounded-md text-sm font-semibold transition-all"
             :class="selectedService === 'agency' ? 'bg-brand-500 text-dark-primary' : 'text-text-muted hover:text-text-primary'"
@@ -162,36 +176,26 @@ async function handleSubmit() {
           </button>
         </div>
 
-        <form @submit.prevent="handleSubmit" class="space-y-5">
+        <UForm :state="form" :validate="validate" class="space-y-5" @submit="handleSubmit">
           <input v-model="honeypot" type="text" name="website" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true" />
-          <div v-for="field in fieldsByService[selectedService]" :key="field.name">
-            <label :for="field.name" class="block text-xs font-semibold uppercase tracking-wider text-text-muted mb-2">
-              {{ field.label }}
-            </label>
-            <input
-              :id="field.name"
-              v-model="form[field.name]"
-              :name="field.name"
-              :placeholder="field.placeholder"
-              :required="['fullName', 'email', 'phone'].includes(field.name)"
-              class="w-full px-4 py-3 bg-light-bg border border-border-main rounded-lg text-sm text-text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all"
-            />
-          </div>
-          <div>
-            <label for="message" class="block text-xs font-semibold uppercase tracking-wider text-text-muted mb-2">
-              Additional Details
-            </label>
-            <textarea
-              id="message"
-              v-model="form.message"
-              rows="3"
-              placeholder="Tell us about your requirements..."
-              class="w-full px-4 py-3 bg-light-bg border border-border-main rounded-lg text-sm text-text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all resize-none"
-            />
-          </div>
-          <div v-if="errorMessage" class="bg-red-50 border border-red-200 rounded-lg px-4 py-3">
-            <p class="text-sm text-red-700 text-center">{{ errorMessage }}</p>
-          </div>
+
+          <UFormField
+            v-for="field in fieldsByService[selectedService]"
+            :key="field.name"
+            :label="field.label"
+            :name="field.name"
+            :required="['fullName', 'email', 'phone'].includes(field.name)"
+            :ui="fieldUi"
+          >
+            <UInput v-model="form[field.name]" :placeholder="field.placeholder" class="w-full" />
+          </UFormField>
+
+          <UFormField label="Additional Details" name="message" :ui="fieldUi">
+            <UTextarea v-model="form.message" :rows="3" placeholder="Tell us about your requirements..." class="w-full" />
+          </UFormField>
+
+          <UAlert v-if="errorMessage" color="error" variant="soft" :title="errorMessage" />
+
           <TurnstileChallenge v-if="turnstileEnabled" ref="turnstileRef" v-model="turnstileToken" action="quick-intake" />
 
           <div v-if="verifying" class="flex items-center justify-center gap-2 bg-light-muted border border-border-main rounded-lg px-4 py-3">
@@ -213,6 +217,7 @@ async function handleSubmit() {
               <UButton variant="ghost" color="neutral" icon="i-lucide-refresh-cw" @click="retryTurnstile">Retry</UButton>
             </div>
           </div>
+
           <UButton type="submit" color="primary" size="lg" block trailing-icon="i-lucide-send" :disabled="sending">
             {{ sending ? 'Sending…' : 'Submit Inquiry' }}
           </UButton>
@@ -220,7 +225,7 @@ async function handleSubmit() {
             By submitting, you agree to our
             <NuxtLink to="/privacy-policy" class="underline hover:text-text-primary transition-colors">Privacy Policy</NuxtLink>.
           </p>
-        </form>
+        </UForm>
       </div>
     </div>
   </section>
