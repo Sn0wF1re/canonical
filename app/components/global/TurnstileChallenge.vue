@@ -43,15 +43,17 @@ function reset() {
 
 function loadScript(): Promise<void> {
   return new Promise((resolve) => {
-    const whenReady = () => {
-      window.turnstile?.ready(() => renderWidget())
+    // Cloudflare forbids turnstile.ready() when the api.js tag is async/defer,
+    // so render directly from onload (the documented explicit-rendering path).
+    const whenLoaded = () => {
+      renderWidget()
       resolve()
     }
-    if (window.turnstile) return whenReady()
+    if (window.turnstile) return whenLoaded()
     const script = document.createElement('script')
     script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit'
     script.async = true
-    script.onload = whenReady
+    script.onload = whenLoaded
     document.head.appendChild(script)
   })
 }
