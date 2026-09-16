@@ -82,8 +82,15 @@ export default defineEventHandler(async (event) => {
     }
 
     if (!token || token.length > 2048) {
+      // Honest error rather than silent fake success: a missing token means
+      // the widget never produced one (readiness/flakiness), and silently
+      // discarding real inquiries hides that failure.
       console.warn('[Contact] rejected: missing or oversized turnstile token')
-      return { success: true, message: 'Your inquiry has been received. We will respond within one business day.' }
+      throw createError({
+        statusCode: 400,
+        statusMessage: 'Security check incomplete',
+        message: "The security check wasn't completed. Please wait a moment and try again."
+      })
     }
 
     try {
