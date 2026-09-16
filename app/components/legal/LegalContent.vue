@@ -6,6 +6,29 @@ defineProps<{
   intro: string
   sections: LegalSection[]
 }>()
+
+interface TextSegment {
+  text: string
+  href?: string
+}
+
+// Render plain-text paragraphs while turning bare URLs into real links.
+// Keeps the content model as plain strings (no HTML in the data layer).
+function segments(paragraph: string): TextSegment[] {
+  const parts: TextSegment[] = []
+  const urlPattern = /(https?:\/\/[^\s)]+)/g
+  let lastIndex = 0
+  let match: RegExpExecArray | null
+
+  while ((match = urlPattern.exec(paragraph)) !== null) {
+    if (match.index > lastIndex) parts.push({ text: paragraph.slice(lastIndex, match.index) })
+    parts.push({ text: match[1], href: match[1] })
+    lastIndex = match.index + match[1].length
+  }
+
+  if (lastIndex < paragraph.length) parts.push({ text: paragraph.slice(lastIndex) })
+  return parts.length ? parts : [{ text: paragraph }]
+}
 </script>
 
 <template>
@@ -25,7 +48,16 @@ defineProps<{
           {{ section.heading }}
         </h2>
         <p v-for="(paragraph, j) in section.paragraphs" :key="j" class="text-text-muted leading-relaxed mb-4 last:mb-0">
-          {{ paragraph }}
+          <template v-for="(segment, k) in segments(paragraph)" :key="k">
+            <a
+              v-if="segment.href"
+              :href="segment.href"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-brand-800 underline hover:text-text-primary transition-colors"
+            >{{ segment.text }}</a>
+            <template v-else>{{ segment.text }}</template>
+          </template>
         </p>
       </div>
     </div>
