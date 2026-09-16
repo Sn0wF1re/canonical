@@ -20,12 +20,8 @@ function renderWidget() {
       callback: (value: string) => { token.value = value },
       'expired-callback': () => { token.value = '' },
       'timeout-callback': () => { token.value = '' },
-      'error-callback': (code: unknown) => {
+      'error-callback': () => {
         token.value = ''
-        // Diagnostic only. Turnstile's built-in auto-retry owns recovery, so
-        // we deliberately do NOT remove/re-render here — tearing the widget
-        // down was leaving the page with no widget at all.
-        console.warn('[Turnstile] widget error:', code)
       }
     })
   } catch (error) {
