@@ -68,6 +68,11 @@ async function handleSubmit() {
   sending.value = true
   try {
     const token = await waitToken(turnstileToken)
+    if (turnstileEnabled && !token) {
+      errorMessage.value = "The security check hasn't finished yet. Please wait a moment and try again."
+      turnstileRef.value?.reset()
+      return
+    }
     const base = {
       fullName: form.fullName,
       email: form.email,
@@ -110,7 +115,13 @@ async function handleSubmit() {
         <p class="text-text-muted">Choose a service to begin your inquiry</p>
       </div>
 
-      <div class="bg-white border border-border-main rounded-xl p-6 sm:p-8 shadow-sm">
+      <div v-if="submitted" class="bg-brand-50 border border-brand-200 rounded-xl p-8 text-center">
+        <UIcon name="i-lucide-check-circle" class="w-12 h-12 text-brand-600 mx-auto mb-4" />
+        <h3 class="font-display font-bold text-text-primary text-xl mb-2">Inquiry Submitted</h3>
+        <p class="text-text-muted">Thank you, {{ form.fullName }}. Our team will contact you shortly.</p>
+      </div>
+
+      <div v-else class="bg-white border border-border-main rounded-xl p-6 sm:p-8 shadow-sm">
         <div class="flex flex-col sm:flex-row gap-2 mb-8 p-1 bg-light-muted rounded-lg">
           <button
             @click="selectedService = 'valuation'"

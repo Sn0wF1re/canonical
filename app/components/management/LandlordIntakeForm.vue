@@ -24,6 +24,11 @@ async function handleSubmit() {
   sending.value = true
   try {
     const token = await waitToken(turnstileToken)
+    if (turnstileEnabled && !token) {
+      errorMessage.value = "The security check hasn't finished yet. Please wait a moment and try again."
+      turnstileRef.value?.reset()
+      return
+    }
     await $fetch('/api/contact', {
       method: 'POST',
       body: {
