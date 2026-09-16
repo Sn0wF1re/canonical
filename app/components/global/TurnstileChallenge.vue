@@ -7,39 +7,62 @@ const props = withDefaults(defineProps<{ action?: string }>(), { action: '' })
 const token = defineModel<string>({ default: '' })
 const container = ref<HTMLElement | null>(null)
 let widgetId: unknown = null
+let rerenderAttempts = 0
+
+const MAX_RERENDER_ATTEMPTS = 3
 
 function renderWidget() {
   if (!container.value || !window.turnstile || widgetId) return
-  widgetId = window.turnstile.render(container.value, {
-    sitekey: siteKey,
-    action: props.action || undefined,
-    theme: 'light',
-    callback: (value: string) => { token.value = value },
-    'expired-callback': () => { token.value = '' },
-    'error-callback': () => { token.value = '' }
-  })
+  try {
+    widgetId = window.turnstile.render(container.value, {
+      sitekey: siteKey,
+      action: props.action || undefined,
+      theme: 'light',
+      callback: (value: string) => { token.value = value },
+      'expired-callback': () => { token.value = '' },
+      'error-callback': () => {
+        token.value = ''
+        retryRender()
+      }
+    })
+  } catch {
+    token.value = ''
+    retryRender()
+  }
+}
+
+// Re-render after a transient widget error (e.g. an early challenge 401) so
+// the form self-heals without a page reload.
+function retryRender() {
+  if (rerenderAttempts >= MAX_RERENDER_ATTEMPTS) return
+  rerenderAttempts += 1
+  try {
+    if (window.turnstile && widgetId) window.turnstile.remove(widgetId)
+  } catch {}
+  widgetId = null
+  setTimeout(() => {
+    if (window.turnstile) window.turnstile.ready(() => renderWidget())
+  }, 600)
 }
 
 function reset() {
   token.value = ''
-  if (window.turnstile && widgetId) {
-    window.turnstile.reset(widgetId)
-  }
+  try {
+    if (window.turnstile && widgetId) window.turnstile.reset(widgetId)
+  } catch {}
 }
 
 function loadScript(): Promise<void> {
   return new Promise((resolve) => {
-    if (window.turnstile) {
-      renderWidget()
-      return resolve()
+    const whenReady = () => {
+      window.turnstile?.ready(() => renderWidget())
+      resolve()
     }
+    if (window.turnstile) return whenReady()
     const script = document.createElement('script')
     script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit'
     script.async = true
-    script.onload = () => {
-      renderWidget()
-      resolve()
-    }
+    script.onload = whenReady
     document.head.appendChild(script)
   })
 }
@@ -51,10 +74,10 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
-  if (window.turnstile && widgetId) {
-    window.turnstile.remove(widgetId)
-    widgetId = null
-  }
+  try {
+    if (window.turnstile && widgetId) window.turnstile.remove(widgetId)
+  } catch {}
+  widgetId = null
 })
 </script>
 
