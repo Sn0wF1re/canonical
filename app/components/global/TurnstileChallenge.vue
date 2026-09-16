@@ -49,6 +49,13 @@ defineExpose({ reset })
 onMounted(() => {
   if (siteKey) loadScript()
 })
+
+onUnmounted(() => {
+  if (window.turnstile && widgetId) {
+    window.turnstile.remove(widgetId)
+    widgetId = null
+  }
+})
 </script>
 
 <template>

@@ -3,6 +3,7 @@ declare global {
     turnstile?: {
       render: (element: HTMLElement, options: Record<string, unknown>) => unknown
       reset: (widgetId?: unknown) => void
+      remove: (widgetId?: unknown) => void
     }
   }
 }

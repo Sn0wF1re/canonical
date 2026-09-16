@@ -55,8 +55,8 @@ async function handleSubmit() {
   } catch (error) {
     errorMessage.value = (error as { data?: { message?: string } })?.data?.message
       ?? 'Something went wrong sending your inquiry. Please try again, or reach us on WhatsApp.'
-  } finally {
     turnstileRef.value?.reset()
+  } finally {
     sending.value = false
   }
 }
