@@ -1,5 +1,5 @@
 [[headers]]
-  for = "/hero-video.mp4"
+  for = "/*.mp4"
   [headers.values]
     Cache-Control = "public, max-age=604800"
 

@@ -22,7 +22,7 @@ onMounted(() => {
       poster="/hero-poster.webp"
       class="absolute inset-0 w-full h-full object-cover"
     >
-      <source src="/hero-video.mp4" type="video/mp4" />
+      <source src="/hero-video-v2.mp4" type="video/mp4" />
     </video>
 
     <!-- Gradient Overlay -->
