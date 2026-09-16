@@ -116,13 +116,28 @@ export default defineEventHandler(async (event) => {
     }
   }
 
-  // Tier 1 content checks — silent drop, humans basically never trip these.
+  // Tier 1 content checks. Silent drop for unverified submitters; if Turnstile
+  // already proved the submitter is human, be honest instead of faking success.
   if (isTooFast(body?.loadedAt)) {
     console.warn('[Contact] rejected: sub-3s-submit')
+    if (verifiedAsHuman) {
+      throw createError({
+        statusCode: 400,
+        statusMessage: 'Submission too quick',
+        message: 'Your submission came through too quickly to verify. Please try again.'
+      })
+    }
     return { success: true, message: 'Your inquiry has been received. We will respond within one business day.' }
   }
   if (hasTooManyUrls(body)) {
     console.warn('[Contact] rejected: link-spam')
+    if (verifiedAsHuman) {
+      throw createError({
+        statusCode: 400,
+        statusMessage: 'Too many links',
+        message: 'Your message contains too many links — please remove some and try again.'
+      })
+    }
     return { success: true, message: 'Your inquiry has been received. We will respond within one business day.' }
   }
 
