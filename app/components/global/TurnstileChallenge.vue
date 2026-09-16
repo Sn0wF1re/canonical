@@ -17,6 +17,9 @@ function renderWidget() {
       theme: 'light',
       // Normal visitors never see the widget; only risky sessions get a challenge.
       appearance: 'interaction-only',
+      // Recover faster from transient failures on weak connections (default 8000ms).
+      retry: 'auto',
+      'retry-interval': 4000,
       callback: (value: string) => { token.value = value },
       'expired-callback': () => { token.value = '' },
       'timeout-callback': () => { token.value = '' },
