@@ -7,9 +7,6 @@ const props = withDefaults(defineProps<{ action?: string }>(), { action: '' })
 const token = defineModel<string>({ default: '' })
 const container = ref<HTMLElement | null>(null)
 let widgetId: unknown = null
-let rerenderAttempts = 0
-
-const MAX_RERENDER_ATTEMPTS = 3
 
 function renderWidget() {
   if (!container.value || !window.turnstile || widgetId) return
@@ -18,31 +15,23 @@ function renderWidget() {
       sitekey: siteKey,
       action: props.action || undefined,
       theme: 'light',
+      // Normal visitors never see the widget; only risky sessions get a challenge.
+      appearance: 'interaction-only',
       callback: (value: string) => { token.value = value },
       'expired-callback': () => { token.value = '' },
-      'error-callback': () => {
+      'timeout-callback': () => { token.value = '' },
+      'error-callback': (code: unknown) => {
         token.value = ''
-        retryRender()
+        // Diagnostic only. Turnstile's built-in auto-retry owns recovery, so
+        // we deliberately do NOT remove/re-render here — tearing the widget
+        // down was leaving the page with no widget at all.
+        console.warn('[Turnstile] widget error:', code)
       }
     })
-  } catch {
+  } catch (error) {
     token.value = ''
-    retryRender()
+    console.warn('[Turnstile] render failed:', error)
   }
-}
-
-// Re-render after a transient widget error (e.g. an early challenge 401) so
-// the form self-heals without a page reload.
-function retryRender() {
-  if (rerenderAttempts >= MAX_RERENDER_ATTEMPTS) return
-  rerenderAttempts += 1
-  try {
-    if (window.turnstile && widgetId) window.turnstile.remove(widgetId)
-  } catch {}
-  widgetId = null
-  setTimeout(() => {
-    if (window.turnstile) window.turnstile.ready(() => renderWidget())
-  }, 600)
 }
 
 function reset() {
@@ -83,7 +72,7 @@ onUnmounted(() => {
 
 <template>
   <ClientOnly>
-    <div class="flex justify-center min-h-[2.5rem]" :data-turnstile-host="siteKey ? '1' : undefined">
+    <div class="flex justify-center" :data-turnstile-host="siteKey ? '1' : undefined">
       <div ref="container" />
     </div>
     <template #fallback>
