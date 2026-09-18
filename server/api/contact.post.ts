@@ -1,6 +1,6 @@
 import nodemailer from 'nodemailer'
 import { buildInquiryEmail, type InquiryPayload } from '../utils/inquiry-email'
-import { getClientIp, hasTooManyUrls, isTooFast, rateLimitState } from '../utils/anti-abuse'
+import { getClientIp, hasTooManyUrls, isTooFast, rateLimitState, RATE_LIMIT_MAX_VERIFIED, RATE_LIMIT_MAX_UNVERIFIED } from '../utils/anti-abuse'
 
 const SMTP_HOST = 'smtp.gmail.com'
 const RATE_LIMIT_FALLBACK_SECONDS = 10 * 60
@@ -66,10 +66,11 @@ export default defineEventHandler(async (event) => {
     return { success: true, message: 'Your inquiry has been received. We will respond within one business day.' }
   }
 
-  // Tier 2 first: Cloudflare Turnstile is the human/bot gate, verified only
-  // when a secret is configured. Bots get the same silent fake success; once
-  // verified, throttling can be honest with a human.
-  let verifiedAsHuman = false
+  // Tier 2: Cloudflare Turnstile is the primary human/bot gate, but it must
+  // never block a real inquiry. When it cannot confirm the visitor (missing
+  // token, failed verification, or a network error) the submission proceeds
+  // as "unverified" and is subject to a stricter rate limit instead.
+  let verified = false
   const turnstileSecret = process.env.TURNSTILE_SECRET_KEY
   if (turnstileSecret) {
     const token = String(body?.token ?? '')
@@ -82,44 +83,34 @@ export default defineEventHandler(async (event) => {
     }
 
     if (!token || token.length > 2048) {
-      // Honest error rather than silent fake success: a missing token means
-      // the widget never produced one (readiness/flakiness), and silently
-      // discarding real inquiries hides that failure.
-      console.warn('[Contact] rejected: missing or oversized turnstile token')
-      throw createError({
-        statusCode: 400,
-        statusMessage: 'Security check incomplete',
-        message: "The security check wasn't completed. Please wait a moment and try again."
-      })
-    }
-
-    try {
-      const verification = await $fetch<{ success: boolean; action?: string; hostname?: string }>(
-        'https://challenges.cloudflare.com/turnstile/v0/siteverify',
-        {
-          method: 'POST',
-          signal: AbortSignal.timeout(10_000),
-          body: {
-            secret: turnstileSecret,
-            response: token,
-            remoteip: clientIp
+      console.warn('[Contact] unverified: missing or oversized turnstile token')
+    } else {
+      try {
+        const verification = await $fetch<{ success: boolean; action?: string; hostname?: string }>(
+          'https://challenges.cloudflare.com/turnstile/v0/siteverify',
+          {
+            method: 'POST',
+            signal: AbortSignal.timeout(10_000),
+            body: {
+              secret: turnstileSecret,
+              response: token,
+              remoteip: clientIp
+            }
           }
-        }
-      )
-      const actionOk = VALID_ACTIONS.has(action) && verification.action === action
-      const hostOk = allowedHostnames.has(String(verification.hostname ?? ''))
-      if (!verification.success || !actionOk || !hostOk) {
-        console.warn(
-          '[Contact] rejected: turnstile verification failed',
-          `(success=${verification.success} action=${verification.action ?? '-'} hostname=${verification.hostname ?? '-'})`
         )
-        return { success: true, message: 'Your inquiry has been received. We will respond within one business day.' }
+        const actionOk = VALID_ACTIONS.has(action) && verification.action === action
+        const hostOk = allowedHostnames.has(String(verification.hostname ?? ''))
+        verified = Boolean(verification.success && actionOk && hostOk)
+        if (!verified) {
+          console.warn(
+            '[Contact] unverified: turnstile verification failed',
+            `(success=${verification.success} action=${verification.action ?? '-'} hostname=${verification.hostname ?? '-'})`
+          )
+        }
+      } catch (error) {
+        // Network/API error: treat as unverified rather than blocking the lead.
+        console.error('[Contact] turnstile verification request failed:', error)
       }
-      verifiedAsHuman = true
-    } catch (error) {
-      // Fail open on transient verification-API errors: log loudly instead
-      // of blocking real inquiries on a third-party hiccup.
-      console.error('[Contact] turnstile verification request failed:', error)
     }
   }
 
@@ -127,7 +118,7 @@ export default defineEventHandler(async (event) => {
   // already proved the submitter is human, be honest instead of faking success.
   if (isTooFast(body?.loadedAt)) {
     console.warn('[Contact] rejected: sub-3s-submit')
-    if (verifiedAsHuman) {
+    if (verified) {
       throw createError({
         statusCode: 400,
         statusMessage: 'Submission too quick',
@@ -138,7 +129,7 @@ export default defineEventHandler(async (event) => {
   }
   if (hasTooManyUrls(body)) {
     console.warn('[Contact] rejected: link-spam')
-    if (verifiedAsHuman) {
+    if (verified) {
       throw createError({
         statusCode: 400,
         statusMessage: 'Too many links',
@@ -152,10 +143,15 @@ export default defineEventHandler(async (event) => {
   // it — no countdown gimmicks, just an approximate wait. If we cannot know
   // the submitter is human (no secret configured), stay silent.
   const now = Date.now()
-  const limit = rateLimitState(clientIp, now)
+  const limit = rateLimitState(
+    clientIp,
+    now,
+    verified ? RATE_LIMIT_MAX_VERIFIED : RATE_LIMIT_MAX_UNVERIFIED,
+    verified ? 'verified' : 'unverified'
+  )
   if (!limit.allowed) {
     const minutes = Math.max(1, Math.ceil((limit.retryAfterSeconds ?? RATE_LIMIT_FALLBACK_SECONDS) / 60))
-    if (verifiedAsHuman || !turnstileSecret) {
+    if (verified || !turnstileSecret) {
       console.warn(`[Contact] rate-limited ${clientIp} — retry in ~${minutes}min`)
       throw createError({
         statusCode: 429,
@@ -166,6 +162,10 @@ export default defineEventHandler(async (event) => {
     }
     console.warn(`[Contact] rejected: rate-limit (unverified) ${clientIp}`)
     return { success: true, message: 'Your inquiry has been received. We will respond within one business day.' }
+  }
+
+  if (!verified) {
+    console.warn(`[Contact] delivering unverified submission from ${clientIp}`)
   }
 
   const inquiry = buildInquiryEmail({ ...body, fullName, email, message })

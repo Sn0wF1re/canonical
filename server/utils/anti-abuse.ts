@@ -3,6 +3,11 @@ const RATE_LIMIT_WINDOW = 10 * 60 * 1000
 const MIN_INTERACTION_AGE = 3000
 const MAX_URLS = 2
 
+// Unverified submissions (Turnstile could not confirm the visitor) get a
+// tighter allowance than verified ones.
+export const RATE_LIMIT_MAX_VERIFIED = 5
+export const RATE_LIMIT_MAX_UNVERIFIED = 3
+
 // In-memory sliding window. On serverless this is best-effort (per instance)
 // but still blunts same-instance floods at zero cost.
 const hits = new Map<string, number[]>()
@@ -16,9 +21,10 @@ export interface RateLimitState {
   retryAfterSeconds?: number
 }
 
-export function rateLimitState(ip: string, now: number): RateLimitState {
-  const window = (hits.get(ip) ?? []).filter((hit) => !isStale(hit, now))
-  if (window.length >= RATE_LIMIT_MAX) {
+export function rateLimitState(ip: string, now: number, max = RATE_LIMIT_MAX, namespace = 'default'): RateLimitState {
+  const key = `${namespace}:${ip}`
+  const window = (hits.get(key) ?? []).filter((hit) => !isStale(hit, now))
+  if (window.length >= max) {
     const oldest = Math.min(...window)
     return {
       allowed: false,
@@ -28,7 +34,7 @@ export function rateLimitState(ip: string, now: number): RateLimitState {
     }
   }
   window.push(now)
-  hits.set(ip, window)
+  hits.set(key, window)
   return { allowed: true }
 }
 
