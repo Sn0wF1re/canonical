@@ -101,7 +101,9 @@ export default defineEventHandler(async (event) => {
         const actionOk = VALID_ACTIONS.has(action) && verification.action === action
         const hostOk = allowedHostnames.has(String(verification.hostname ?? ''))
         verified = Boolean(verification.success && actionOk && hostOk)
-        if (!verified) {
+        if (verified) {
+          console.log(`[Contact] turnstile verified (action=${verification.action ?? '-'} hostname=${verification.hostname ?? '-'})`)
+        } else {
           console.warn(
             '[Contact] unverified: turnstile verification failed',
             `(success=${verification.success} action=${verification.action ?? '-'} hostname=${verification.hostname ?? '-'})`
@@ -112,6 +114,8 @@ export default defineEventHandler(async (event) => {
         console.error('[Contact] turnstile verification request failed:', error)
       }
     }
+  } else {
+    console.warn('[Contact] turnstile: secret not configured — no siteverify call made')
   }
 
   // Tier 1 content checks. Silent drop for unverified submitters; if Turnstile
