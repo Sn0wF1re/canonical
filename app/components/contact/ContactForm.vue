@@ -27,7 +27,6 @@ const loadedAt = Date.now()
 const { enabled: turnstileEnabled, waitToken } = useTurnstile()
 const turnstileRef = ref<{ reset: () => void } | null>(null)
 const verifying = ref(false)
-const turnstileFailed = ref(false)
 const whatsappHref = `https://wa.me/${siteContent.company.whatsapp.replace(/[^0-9]/g, '')}`
 const phoneHref = `tel:${siteContent.company.phone.replace(/[^0-9+]/g, '')}`
 
@@ -43,11 +42,6 @@ function validate(state: typeof form) {
   return errors
 }
 
-function retryTurnstile() {
-  turnstileFailed.value = false
-  errorMessage.value = ''
-  turnstileRef.value?.reset()
-}
 
 async function handleSubmit() {
   errorMessage.value = ''
@@ -55,15 +49,10 @@ async function handleSubmit() {
   try {
     if (turnstileEnabled && !turnstileToken.value) {
       verifying.value = true
-      turnstileFailed.value = false
       await waitToken(turnstileToken, 20000)
       verifying.value = false
     }
     const token = turnstileToken.value
-    if (turnstileEnabled && !token) {
-      turnstileFailed.value = true
-      return
-    }
     await $fetch('/api/contact', {
       method: 'POST',
       body: {
@@ -165,28 +154,31 @@ async function handleSubmit() {
           <UTextarea v-model="form.message" :rows="5" placeholder="Tell us how we can help..." class="w-full" />
         </UFormField>
 
-        <UAlert v-if="errorMessage" color="error" variant="soft" :title="errorMessage" />
+        <div v-if="errorMessage" class="space-y-3">
+
+
+          <UAlert color="error" variant="soft" :title="errorMessage" />
+
+
+          <div class="flex flex-wrap gap-3">
+
+
+            <UButton :to="whatsappHref" target="_blank" color="primary" icon="i-lucide-message-circle">WhatsApp Us</UButton>
+
+
+            <UButton :href="phoneHref" variant="outline" color="neutral" icon="i-lucide-phone">Call Us</UButton>
+
+
+          </div>
+
+
+        </div>
 
         <TurnstileChallenge v-if="turnstileEnabled" ref="turnstileRef" v-model="turnstileToken" action="contact" />
 
         <div v-if="verifying" class="flex items-center justify-center gap-2 bg-light-muted border border-border-main rounded-lg px-4 py-3">
           <UIcon name="i-lucide-loader-circle" class="w-4 h-4 animate-spin text-text-muted" />
           <p class="text-sm text-text-muted">Verifying you're human…</p>
-        </div>
-
-        <div v-if="turnstileFailed" class="space-y-3">
-          <UAlert
-            color="warning"
-            variant="soft"
-            icon="i-lucide-shield-alert"
-            title="We couldn't complete the security check"
-            description="Please retry, or reach us directly so we don't miss your inquiry."
-          />
-          <div class="flex flex-wrap gap-3">
-            <UButton :to="whatsappHref" target="_blank" color="primary" icon="i-lucide-message-circle">WhatsApp Us</UButton>
-            <UButton :href="phoneHref" variant="outline" color="neutral" icon="i-lucide-phone">Call Us</UButton>
-            <UButton variant="ghost" color="neutral" icon="i-lucide-refresh-cw" @click="retryTurnstile">Retry</UButton>
-          </div>
         </div>
 
         <UButton type="submit" color="primary" size="lg" block trailing-icon="i-lucide-send" :disabled="sending">
