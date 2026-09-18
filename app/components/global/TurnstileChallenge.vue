@@ -15,8 +15,8 @@ function renderWidget() {
       sitekey: siteKey,
       action: props.action || undefined,
       theme: 'light',
-      // Normal visitors never see the widget; only risky sessions get a challenge.
-      appearance: 'interaction-only',
+      // Always visible and clickable for predictability.
+      appearance: 'always',
       // Recover faster from transient failures on weak connections (default 8000ms).
       retry: 'auto',
       'retry-interval': 4000,
@@ -73,11 +73,11 @@ onUnmounted(() => {
 
 <template>
   <ClientOnly>
-    <div class="flex justify-center" :data-turnstile-host="siteKey ? '1' : undefined">
+    <div class="flex justify-center min-h-[65px]" :data-turnstile-host="siteKey ? '1' : undefined">
       <div ref="container" />
     </div>
     <template #fallback>
-      <div class="min-h-[2.5rem]" />
+      <div class="min-h-[65px]" />
     </template>
   </ClientOnly>
 </template>
